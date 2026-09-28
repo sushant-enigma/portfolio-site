@@ -277,6 +277,8 @@
     background: linear-gradient(90deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.34) 36%, rgba(0, 0, 0, 0) 64%);
   }
   #fx { position: fixed; inset: 0; z-index: 0; width: 100%; height: 100%; display: block; pointer-events: none; }
+  /* 100lvh is the tallest viewport, so a phone's address bar sliding in or out never resizes these */
+  #galaxy, #fx { height: 100lvh; }
   .hero-grid-overlay {
     position: absolute; inset: 0; z-index: 2; pointer-events: none;
     background-image:
@@ -677,6 +679,11 @@
   .footer a:hover { color: var(--text); }
 
   .magnetic { will-change: transform; }
+  /* touch screens: no scroll-speed skew, and no permanent GPU layer for every card */
+  @media (hover: none), (pointer: coarse) {
+    .xp-card, .proj-card { transform: none; will-change: auto; }
+    .magnetic { will-change: auto; }
+  }
 
   /* ---------- responsive ---------- */
   @media (max-width: 980px) {
@@ -1779,6 +1786,7 @@
       var oldW = W, oldH = H;
       W = hero.clientWidth;
       H = hero.clientHeight;
+      if (W === oldW && H === oldH) return;
       cv.width = Math.round(W * DPR);
       cv.height = Math.round(H * DPR);
       cv.style.width = W + 'px';
@@ -1953,6 +1961,9 @@
       try {
         renderer = new T.WebGLRenderer({ canvas: gcv, antialias: false, powerPreference: 'high-performance' });
       } catch (e) { return; }
+      // size from the canvas itself: it's 100lvh tall, so the address bar moving doesn't change it
+      function cvW() { return gcv.clientWidth || window.innerWidth; }
+      function cvH() { return gcv.clientHeight || window.innerHeight; }
       // pick the starting quality from the GPU name; CPU cores and memory say little about graphics power
       var gpuName = '';
       try {
@@ -1972,7 +1983,7 @@
       var prScale = 1;
       function fitPR() {
         var cap = Math.min(window.devicePixelRatio || 1, lowTier ? 1.25 : 1.75);
-        var fit = Math.sqrt(PX_BUDGET / Math.max(1, window.innerWidth * window.innerHeight));
+        var fit = Math.sqrt(PX_BUDGET / Math.max(1, cvW() * cvH()));
         return Math.max(0.5, Math.min(cap, fit) * prScale);
       }
       if (lowTier) root.classList.add('lite');
@@ -1984,10 +1995,10 @@
         document.body.appendChild(perf.el);
       }
       renderer.setPixelRatio(fitPR());
-      renderer.setSize(window.innerWidth, window.innerHeight, false);
+      renderer.setSize(cvW(), cvH(), false);
       renderer.setClearColor(0x000000, 1);
       var scene = new T.Scene();
-      var camera = new T.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.05, 5000);
+      var camera = new T.PerspectiveCamera(50, cvW() / cvH(), 0.05, 5000);
 
       var NOISE = `
         vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
@@ -2780,10 +2791,10 @@
           var dbs = renderer.getDrawingBufferSize(new T.Vector2());
           composer = new T.EffectComposer(renderer, new T.WebGLRenderTarget(dbs.x, dbs.y, { minFilter: T.LinearFilter, magFilter: T.LinearFilter, format: T.RGBAFormat, type: hdrOk ? T.HalfFloatType : T.UnsignedByteType }));
           composer.setPixelRatio(renderer.getPixelRatio());
-          composer.setSize(window.innerWidth, window.innerHeight);
+          composer.setSize(cvW(), cvH());
           composer.addPass(new T.RenderPass(scene, camera));
           if (!lowTier && T.UnrealBloomPass) {
-            bloomPass = new T.UnrealBloomPass(new T.Vector2(window.innerWidth, window.innerHeight), 0.95, 0.55, 0.52);
+            bloomPass = new T.UnrealBloomPass(new T.Vector2(cvW(), cvH()), 0.95, 0.55, 0.52);
             composer.addPass(bloomPass);
           }
           finalPass = new T.ShaderPass(FINAL);
@@ -2840,7 +2851,7 @@
         };
       }
 
-      var W = window.innerWidth, H = window.innerHeight;
+      var W = cvW(), H = cvH();
       var mxS = 0, myS = 0, tmx = 0, tmy = 0;
       var blendK = reduce ? 1 : 0, formSignalled = false, lensS = 0;
       var xs = 0, xsPrev = 0, lastIdx = 0, pulse = 0, measureTick = 0;
@@ -2969,9 +2980,12 @@
         }
       }
       function resize() {
-        W = window.innerWidth;
-        H = window.innerHeight;
-        renderer.setPixelRatio(fitPR());
+        var nw = cvW(), nh = cvH(), npr = fitPR();
+        // nothing changed (a phone's address bar moving): keep the buffers instead of rebuilding them
+        if (nw === W && nh === H && npr === renderer.getPixelRatio()) return;
+        W = nw;
+        H = nh;
+        renderer.setPixelRatio(npr);
         renderer.setSize(W, H, false);
         camera.aspect = W / H;
         camera.updateProjectionMatrix();
@@ -2999,17 +3013,18 @@
         diskGeo.setDrawRange(0, n >= 4 ? Math.floor(diskN * 0.5) : diskN);
         jetGeo.setDrawRange(0, n >= 4 ? Math.floor(jetN * 0.5) : jetN);
         composer = n >= 6 ? null : composerFull;
-        try { localStorage.setItem('sn-quality', JSON.stringify({ gpu: gpuName, level: n })); } catch (e) {}
+        try { localStorage.setItem('sn-quality-2', JSON.stringify({ gpu: gpuName, level: n })); } catch (e) {}
       }
       // a returning visitor starts at the level this device settled on last time
       try {
-        var savedQ = JSON.parse(localStorage.getItem('sn-quality') || 'null');
+        var savedQ = JSON.parse(localStorage.getItem('sn-quality-2') || 'null');
         if (savedQ && savedQ.gpu === gpuName && savedQ.level > 0) setLevel(Math.min(MAX_LEVEL, savedQ.level));
       } catch (e) {}
 
       // measured on the wall clock, not the animation clock (which is capped per frame and runs slow on
       // a slow machine); starts after the first second, while the intro still hides any change
       var fAcc = 0, fDts = [], fSlow = 0, settleT = 1, goodT = 0, upT = -99, upLocked = false, clock0 = 0, clockLast = 0;
+      var pinFrom = -1, pinCuts = 0, downLocked = false;
       function monitor() {
         var now = performance.now() / 1000;
         if (!clock0) { clock0 = clockLast = now; return; }
@@ -3023,12 +3038,26 @@
         if (fAcc < 0.75) return;
         // the median ignores a one-off hitch (a first scroll, a font arriving); only steady slowness counts
         fDts.sort(function (a, b) { return a - b; });
-        var med = fDts[fDts.length >> 1], slowShare = fSlow / fDts.length, win = fAcc;
+        var n = fDts.length, med = fDts[n >> 1], slowShare = fSlow / n, win = fAcc;
+        // every frame pinned at ~33 ms: the browser may be holding the page at 30 fps (Low Power Mode, battery saver)
+        var pinned = fDts[Math.floor(n * 0.1)] > 1 / 33 && fDts[Math.floor(n * 0.9)] < 1 / 27;
         fAcc = 0;
         fDts = [];
         fSlow = 0;
         // typical frame below about 50 fps, or a quarter of frames dropped
-        if ((med > 1 / 50 || slowShare > 0.25) && level < MAX_LEVEL) {
+        if ((med > 1 / 50 || slowShare > 0.25) && level < MAX_LEVEL && !downLocked) {
+          if (pinned) {
+            if (pinFrom < 0) pinFrom = level;
+            if (++pinCuts > 2) {
+              // two cuts changed nothing, so the limit is the browser's, not the GPU's: undo them and stop
+              setLevel(pinFrom);
+              downLocked = upLocked = true;
+              return;
+            }
+          } else {
+            pinFrom = -1;
+            pinCuts = 0;
+          }
           // the slower it runs, the bigger the cut, so a weak machine settles in a second or two
           var jump = med > 1 / 25 ? 3 : med > 1 / 38 ? 2 : 1;
           if (t - upT < 4) { upLocked = true; jump = 1; }
@@ -3050,7 +3079,7 @@
         if (perf.acc < 1) return;
         renderer.getDrawingBufferSize(perfSize);
         perf.el.textContent = Math.round(perf.n / perf.acc) + ' fps\n' +
-          (lowTier ? 'low' : midTier ? 'mid' : 'high') + ' tier, level ' + level + ' of ' + MAX_LEVEL + (upLocked ? ' (settled)' : '') + '\n' +
+          (lowTier ? 'low' : midTier ? 'mid' : 'high') + ' tier, level ' + level + ' of ' + MAX_LEVEL + (downLocked ? ' (browser holds 30 fps)' : upLocked ? ' (settled)' : '') + '\n' +
           perfSize.x + ' x ' + perfSize.y + ' px, bloom ' + (composer && bloomPass && bloomPass.enabled ? 'on' : 'off') +
           (root.classList.contains('lite') ? ', no glass blur' : '') + (level >= 7 ? ', black hole every 3rd frame' : '') +
           '\n' + (gpuName || 'unknown GPU').slice(0, 70);
@@ -3101,8 +3130,10 @@
     var FW = 0, FH = 0, meteors = [], nextMeteor = 3, wstars = [];
     var lastSY = window.scrollY || 0, svel = 0, sdir = 1, svS = 0, svSet = 0;
     function sizeFx() {
-      FW = window.innerWidth;
-      FH = window.innerHeight;
+      var w = fx.clientWidth || window.innerWidth, h = fx.clientHeight || window.innerHeight;
+      if (w === FW && h === FH) return;
+      FW = w;
+      FH = h;
       fx.width = Math.round(FW * DPR);
       fx.height = Math.round(FH * DPR);
       fctx.setTransform(DPR, 0, 0, DPR, 0, 0);
@@ -3111,7 +3142,7 @@
       }
     }
     // the scroll-speed skew is set on visible cards only: a variable on <html> restyles the whole page every frame
-    var tiltCards = Array.prototype.slice.call(document.querySelectorAll('.xp-card, .proj-card'));
+    var tiltCards = fine ? Array.prototype.slice.call(document.querySelectorAll('.xp-card, .proj-card')) : [];
     function setSv(el) {
       el.style.setProperty('--sv', svSet.toFixed(3));
       el.style.setProperty('--sva', Math.abs(svSet).toFixed(3));
@@ -3395,7 +3426,9 @@
     var pctx = pc.getContext('2d');
     var PW = 0, PH = 0, mini = [], projVisible = false;
     function sizeMini() {
-      PW = pc.clientWidth; PH = pc.clientHeight;
+      var w = pc.clientWidth, h = pc.clientHeight;
+      if (w === PW && h === PH && mini.length) return;
+      PW = w; PH = h;
       pc.width = Math.round(PW * DPR); pc.height = Math.round(PH * DPR);
       pctx.setTransform(DPR, 0, 0, DPR, 0, 0);
       mini = [];
