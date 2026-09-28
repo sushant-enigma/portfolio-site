@@ -11,7 +11,6 @@ The source for my portfolio at **[sushantnagil.com](https://sushantnagil.com)**.
 |---|---|
 | Cloudflare Workers static assets (`wrangler.jsonc`) | Serves `site/` on `sushantnagil.com`. No Worker code runs for these requests, so they're free and unlimited, and the free plan has no metered billing that could grow. |
 | Redirect Worker (`redirect/`) | Sends `www.sushantnagil.com` to the bare domain with a 301, keeping the path and query. |
-| Preview environment | `preview.sushantnagil.com` gets every change first. It's marked `noindex`. |
 | Zone settings (`scripts/zone-settings.sh`) | HTTPS only, TLS 1.2 minimum, TLS 1.3, strict SSL, DNSSEC. |
 
 ## Security
@@ -48,8 +47,6 @@ Add `?perf` to the address to see the frame rate, tier, level, resolution and GP
 ```sh
 source ~/.config/cloudflare/portfolio.env   # CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID
 npm ci
-npm run deploy:preview                      # https://preview.sushantnagil.com
-./scripts/check-live.sh preview.sushantnagil.com
 npm run deploy                              # the live site and the www redirect
 ./scripts/check-live.sh
 ```
@@ -60,5 +57,5 @@ npm run deploy                              # the live site and the www redirect
 site/           index.html, 404.html, favicon, robots, sitemap, _headers
 scripts/        build.mjs, check-live.sh, zone-settings.sh
 redirect/       the www -> apex Worker
-wrangler.jsonc  the site Worker and its preview environment
+wrangler.jsonc  the site Worker
 ```

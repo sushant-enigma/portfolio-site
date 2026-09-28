@@ -4,8 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "preview": "npm run build && wrangler dev",
-    "deploy:preview": "node scripts/build.mjs --preview && wrangler deploy --env preview",
+    "dev": "npm run build && wrangler dev",
     "deploy": "npm run build && wrangler deploy && wrangler deploy -c redirect/wrangler.jsonc"
   },
   "devDependencies": {
