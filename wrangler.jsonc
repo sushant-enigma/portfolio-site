@@ -1,0 +1,27 @@
+// The site: static files only, served straight from Cloudflare's edge.
+// No Worker code runs for these requests, so they stay free and unlimited.
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "sushantnagil-site",
+  "compatibility_date": "2026-09-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  },
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [{ "pattern": "sushantnagil.com", "custom_domain": true }],
+  "env": {
+    // A separate copy for checking changes before they go live. Hidden from search engines.
+    "preview": {
+      "name": "sushantnagil-preview",
+      "assets": {
+        "directory": "./dist",
+        "not_found_handling": "404-page"
+      },
+      "workers_dev": false,
+      "preview_urls": false,
+      "routes": [{ "pattern": "preview.sushantnagil.com", "custom_domain": true }]
+    }
+  }
+}

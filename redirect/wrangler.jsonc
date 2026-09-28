@@ -1,0 +1,10 @@
+// Sends www.sushantnagil.com to sushantnagil.com, keeping the path and query.
+{
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "sushantnagil-www",
+  "main": "index.js",
+  "compatibility_date": "2026-09-01",
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [{ "pattern": "www.sushantnagil.com", "custom_domain": true }]
+}

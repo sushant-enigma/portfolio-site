@@ -1,0 +1,14 @@
+{
+  "name": "portfolio-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "preview": "npm run build && wrangler dev",
+    "deploy:preview": "node scripts/build.mjs --preview && wrangler deploy --env preview",
+    "deploy": "npm run build && wrangler deploy && wrangler deploy -c redirect/wrangler.jsonc"
+  },
+  "devDependencies": {
+    "wrangler": "4.142.0"
+  }
+}

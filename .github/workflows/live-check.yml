@@ -1,0 +1,19 @@
+# Checks the live site once a day from outside: DNS, certificate, redirects, 404s,
+# security headers, and that the served CSP and SRI hashes still match the page.
+# GitHub emails the repo owner if a scheduled run fails.
+name: live-check
+
+on:
+  schedule:
+    - cron: "17 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - run: ./scripts/check-live.sh
