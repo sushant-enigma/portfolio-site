@@ -545,6 +545,9 @@
   .cert-meta { display: block; font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
   .cert-verify { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-2); white-space: nowrap; transition: color 0.3s; }
   .cert:hover .cert-verify, .cert:focus-visible .cert-verify { color: var(--accent); }
+  .proj-cell.wide { grid-column: 1 / -1; }
+  .proj-cell.wide .certs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 40px; }
+  @media (max-width: 760px) { .proj-cell.wide .certs { grid-template-columns: minmax(0, 1fr); } }
 
   .proj-card.featured { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 3rem); align-items: stretch; }
   .featured-copy { display: flex; flex-direction: column; gap: 14px; }
@@ -1344,27 +1347,9 @@
       </ul>
 
       <div class="proj-grid">
-        <div class="proj-cell" data-reveal>
+        <div class="proj-cell wide" data-reveal>
           <article class="proj-card" data-tilt>
-            <div class="proj-head"><span class="proj-num">01</span><div class="proj-tags"><span class="ptag">Talk</span><span class="ptag amber">KCD Gujarat 2026</span></div></div>
-            <h3>Metering a Nation on Open Source: What Happens When 250 Million Smart Meters Talk to Kubernetes</h3>
-            <p>The open-source path a meter reading takes: MQTT on EMQX, Kafka on Strimzi, microservices on Kubernetes, watched by Prometheus, Grafana and Loki. And what it costs to run one meter.</p>
-            <div class="chips"><span>EMQX</span><span>Strimzi</span><span>Kubernetes</span><span>Prometheus</span></div>
-            <div class="proj-metrics"><div><span class="pm-value">19 Sep 2026</span><span class="pm-label">Ahmedabad</span></div></div>
-          </article>
-        </div>
-        <div class="proj-cell" data-reveal>
-          <article class="proj-card" data-tilt>
-            <div class="proj-head"><span class="proj-num">02</span><div class="proj-tags"><span class="ptag">Talk</span><span class="ptag amber">KCD Gujarat 2026</span></div></div>
-            <h3>The Price of a Meter: Autoscaling Kubernetes Under a Per-Unit Cost Ceiling</h3>
-            <p>Layered autoscaling with KEDA, HPA, VPA and Karpenter, with cost per meter as the number that settles each scaling decision.</p>
-            <div class="chips"><span>KEDA</span><span>HPA</span><span>VPA</span><span>Karpenter</span></div>
-            <div class="proj-metrics"><div><span class="pm-value">19 Sep 2026</span><span class="pm-label">Ahmedabad</span></div></div>
-          </article>
-        </div>
-        <div class="proj-cell" data-reveal>
-          <article class="proj-card" data-tilt>
-            <div class="proj-head"><span class="proj-num">03</span><div class="proj-tags"><span class="ptag violet">Certified</span></div></div>
+            <div class="proj-head"><span class="proj-num">01</span><div class="proj-tags"><span class="ptag violet">Certified</span></div></div>
             <h3>Certifications</h3>
             <p>Four current certifications across Kubernetes, AWS and Terraform. Each one opens its record on Credly.</p>
             <div class="certs">
