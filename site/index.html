@@ -531,6 +531,20 @@
   .proj-metrics { display: flex; flex-wrap: wrap; gap: 28px; margin-top: auto; padding-top: 16px; border-top: 1px solid var(--border); }
   .pm-value { display: block; font-family: var(--mono); font-weight: 600; font-size: 1.2rem; color: var(--accent); font-variant-numeric: tabular-nums; }
   .pm-label { display: block; font-size: 0.78rem; color: var(--muted); }
+  .certs { display: flex; flex-direction: column; gap: 4px; margin-top: auto; padding-top: 12px; border-top: 1px solid var(--border); }
+  .cert {
+    display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; align-items: center; gap: 12px;
+    padding: 8px 10px; margin-inline: -10px;
+    border: 1px solid transparent; border-radius: 10px;
+    text-decoration: none;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .cert:hover, .cert:focus-visible { border-color: rgba(124, 196, 255, 0.28); background: rgba(124, 196, 255, 0.05); }
+  .cert img { display: block; width: 40px; height: 40px; }
+  .cert-name { display: block; font-weight: 600; font-size: 0.9rem; line-height: 1.3; color: var(--text); }
+  .cert-meta { display: block; font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
+  .cert-verify { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-2); white-space: nowrap; transition: color 0.3s; }
+  .cert:hover .cert-verify, .cert:focus-visible .cert-verify { color: var(--accent); }
 
   .proj-card.featured { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 3rem); align-items: stretch; }
   .featured-copy { display: flex; flex-direction: column; gap: 14px; }
@@ -1352,12 +1366,12 @@
           <article class="proj-card" data-tilt>
             <div class="proj-head"><span class="proj-num">03</span><div class="proj-tags"><span class="ptag violet">Certified</span></div></div>
             <h3>Certifications</h3>
-            <p>Four current certifications across Kubernetes, AWS and Terraform.</p>
-            <div class="proj-metrics">
-              <div><span class="pm-value">DEA</span><span class="pm-label">AWS Data Engineer · May 2026</span></div>
-              <div><span class="pm-value">CKA</span><span class="pm-label">Kubernetes Administrator · Dec 2025</span></div>
-              <div><span class="pm-value">Terraform</span><span class="pm-label">HashiCorp Associate · Sep 2025</span></div>
-              <div><span class="pm-value">SAA</span><span class="pm-label">AWS Solutions Architect · Jul 2025</span></div>
+            <p>Four current certifications across Kubernetes, AWS and Terraform. Each one opens its record on Credly.</p>
+            <div class="certs">
+              <a class="cert" href="https://www.credly.com/badges/08d52b8c-f11f-43cf-b497-4d449ecc92f1" target="_blank" rel="noopener"><img src="/badges/dea.png" alt="" width="40" height="40" loading="lazy"><span><span class="cert-name">AWS Data Engineer – Associate</span><span class="cert-meta">May 2026</span></span><span class="cert-verify">Verify ↗</span></a>
+              <a class="cert" href="https://www.credly.com/badges/fed0d324-7e61-4401-a86d-37cf9643d947" target="_blank" rel="noopener"><img src="/badges/cka.png" alt="" width="40" height="40" loading="lazy"><span><span class="cert-name">Certified Kubernetes Administrator</span><span class="cert-meta">Dec 2025</span></span><span class="cert-verify">Verify ↗</span></a>
+              <a class="cert" href="https://www.credly.com/badges/ae7d1f4c-8d61-401d-884d-9f29099eb628" target="_blank" rel="noopener"><img src="/badges/terraform.png" alt="" width="40" height="40" loading="lazy"><span><span class="cert-name">HashiCorp Terraform Associate</span><span class="cert-meta">Sep 2025</span></span><span class="cert-verify">Verify ↗</span></a>
+              <a class="cert" href="https://www.credly.com/badges/f5bb537c-6ae9-4928-b4da-f7bbaf8d7316" target="_blank" rel="noopener"><img src="/badges/saa.png" alt="" width="40" height="40" loading="lazy"><span><span class="cert-name">AWS Solutions Architect – Associate</span><span class="cert-meta">Jul 2025</span></span><span class="cert-verify">Verify ↗</span></a>
             </div>
           </article>
         </div>
