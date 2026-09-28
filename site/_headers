@@ -9,3 +9,8 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()
   Cross-Origin-Opener-Policy: same-origin
+
+# The resume: browsers show PDFs in their own viewer, so the page CSP doesn't apply and could block it.
+/Sushant_Nagil_Resume.pdf
+  ! Content-Security-Policy
+  Content-Disposition: inline; filename="Sushant_Nagil_Resume.pdf"

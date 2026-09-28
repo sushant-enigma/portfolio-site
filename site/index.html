@@ -12,7 +12,12 @@
 <meta property="og:url" content="https://sushantnagil.com/">
 <meta property="og:title" content="Sushant Nagil · Infrastructure Engineer">
 <meta property="og:description" content="Sushant Nagil, infrastructure engineer and team lead. Kubernetes, Kafka and MQTT platforms on AWS and OCI for smart-metering systems, and write-ups of real production incidents.">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://sushantnagil.com/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A glowing black hole on a dark starfield, beside the line: I build and run cloud infrastructure for IoT platforms.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://sushantnagil.com/og.jpg">
 <style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -215,6 +220,11 @@
     transition: background 0.3s, border-color 0.3s, transform 0.25s var(--ease);
   }
   .nav-cta:hover { background: rgba(124, 196, 255, 0.1); border-color: var(--accent); }
+  .nav-resume { display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 0.8rem; letter-spacing: 0.04em; color: var(--text-2); text-decoration: none; white-space: nowrap; transition: color 0.3s; }
+  .nav-resume:hover, .nav-resume:focus-visible { color: var(--accent); }
+  .nav-resume svg { width: 14px; height: 14px; }
+  .mobile-menu a.menu-resume { margin-top: 10px; font-family: var(--mono); font-size: 0.95rem; font-weight: 500; letter-spacing: 0.08em; color: var(--accent); }
+  a.c-copy { display: inline-block; text-decoration: none; }
   .hamburger {
     display: none;
     flex-direction: column; justify-content: center; gap: 6px;
@@ -701,8 +711,12 @@
     .about-visual { max-width: 440px; }
     .contact-grid { grid-template-columns: 1fr; }
   }
-  @media (max-width: 860px) {
-    .nav-links, .nav-cta { display: none; }
+  @media (max-width: 1180px) {
+    .nav-inner { gap: 22px; }
+    .nav-links { gap: 20px; }
+  }
+  @media (max-width: 960px) {
+    .nav-links, .nav-cta, .nav-resume { display: none; }
     .nav-inner { gap: 10px; }
     .sound-btn.in-nav { position: static; width: 42px; height: 42px; padding: 0; justify-content: center; border-radius: 10px; border-color: var(--border); background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; }
     .sound-btn.in-nav #soundLabel { display: none; }
@@ -760,8 +774,11 @@
       <a href="#about">About</a>
       <a href="#expertise">Expertise</a>
       <a href="#projects">Projects</a>
+      <a href="#incidents">Incidents</a>
+      <a href="#experience">Experience</a>
       <a href="#now">Now</a>
     </div>
+    <a class="nav-resume" href="/Sushant_Nagil_Resume.pdf" target="_blank" rel="noopener">Resume <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg></a>
     <a class="nav-cta magnetic" href="#contact">Get in touch</a>
     <button class="hamburger" id="hamburger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu"><span></span><span></span><span></span></button>
   </div>
@@ -770,8 +787,11 @@
   <a href="#about"><span>01</span>About</a>
   <a href="#expertise"><span>02</span>Expertise</a>
   <a href="#projects"><span>03</span>Projects</a>
-  <a href="#now"><span>04</span>Now</a>
-  <a href="#contact"><span>05</span>Contact</a>
+  <a href="#incidents"><span>04</span>Incidents</a>
+  <a href="#experience"><span>05</span>Experience</a>
+  <a href="#now"><span>06</span>Now</a>
+  <a href="#contact"><span>07</span>Contact</a>
+  <a class="menu-resume" href="/Sushant_Nagil_Resume.pdf" target="_blank" rel="noopener">Resume (PDF) ↗</a>
 </div>
 
 <main>
@@ -1425,6 +1445,7 @@
           <div class="c-row"><span class="c-label">Email</span><a class="c-val" id="c-email" href="mailto:nagilsushant@gmail.com">nagilsushant@gmail.com</a><button class="c-copy" type="button" data-copy="c-email">Copy</button></div>
           <div class="c-row"><span class="c-label">GitHub</span><a class="c-val" id="c-github" href="https://github.com/sushant-enigma" target="_blank" rel="noopener">github.com/sushant-enigma</a><button class="c-copy" type="button" data-copy="c-github">Copy</button></div>
           <div class="c-row"><span class="c-label">LinkedIn</span><a class="c-val" id="c-linkedin" href="https://www.linkedin.com/in/sushant-nagil-3584881ba/" target="_blank" rel="noopener">linkedin.com/in/sushant-nagil-3584881ba</a><button class="c-copy" type="button" data-copy="c-linkedin">Copy</button></div>
+          <div class="c-row"><span class="c-label">Resume</span><a class="c-val" href="/Sushant_Nagil_Resume.pdf" target="_blank" rel="noopener">View the PDF · 2 pages</a><a class="c-copy" href="/Sushant_Nagil_Resume.pdf" download>Download</a></div>
         </div>
       </div>
       <div data-reveal>
@@ -1447,6 +1468,7 @@
 <footer class="footer">
   <div class="container footer-inner">
     <span>© 2026 Sushant Nagil</span>
+    <span>B.Tech, Computer Science · B.K. Birla Institute of Engineering &amp; Technology, Pilani · 2020–2024</span>
     <a href="#top">Back to top ↑</a>
   </div>
 </footer>
@@ -1964,7 +1986,9 @@
       var T = window.THREE;
       if (!T) return;
       var smallScr = Math.min(window.innerWidth, window.innerHeight) < 700;
-      var lowTier = smallScr || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) || (navigator.deviceMemory && navigator.deviceMemory <= 4);
+      // a short screen alone only means a phone (handled by the phone profile below), not a weak computer:
+      // a 1366x768 laptop's browser window is under 700 px tall
+      var lowTier = (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4) || (navigator.deviceMemory && navigator.deviceMemory <= 4);
       var renderer;
       try {
         renderer = new T.WebGLRenderer({ canvas: gcv, antialias: false, powerPreference: 'high-performance' });
@@ -2443,7 +2467,7 @@
       }
       var iconPts = [];
       (function sampleIcons() {
-        for (var k = 0; k < 3; k++) {
+        for (var k = 0; k < 4; k++) {
           var s = 160, c = document.createElement('canvas');
           c.width = c.height = s;
           var x = c.getContext('2d');
@@ -2466,7 +2490,7 @@
             x.scale(6, 6);
             try { x.fill(new Path2D(GH)); } catch (e) { x.beginPath(); x.arc(12, 12, 11, 0, 6.2832); x.fill(); }
             x.restore();
-          } else {
+          } else if (k === 2) {
             x.lineWidth = 9;
             roundRect(x, 14, 14, 132, 132, 22);
             x.stroke();
@@ -2474,6 +2498,15 @@
             x.textAlign = 'center';
             x.textBaseline = 'middle';
             x.fillText('in', 80, 86);
+          } else {
+            // resume: a page with a folded corner and three lines of text
+            x.lineWidth = 9;
+            x.beginPath();
+            x.moveTo(36, 12); x.lineTo(100, 12); x.lineTo(128, 40); x.lineTo(128, 148); x.lineTo(36, 148); x.closePath();
+            x.stroke();
+            x.beginPath(); x.moveTo(100, 12); x.lineTo(100, 40); x.lineTo(128, 40); x.stroke();
+            x.lineWidth = 8;
+            [[56, 72, 108], [56, 96, 108], [56, 120, 90]].forEach(function (l) { x.beginPath(); x.moveTo(l[0], l[1]); x.lineTo(l[2], l[1]); x.stroke(); });
           }
           var d = x.getImageData(0, 0, s, s).data, pts = [];
           for (var yy = 0; yy < s; yy += 2) {
@@ -3409,7 +3442,7 @@
     }
     if (snd.want) gestureEvents.forEach(function (n) { window.addEventListener(n, onGesture, true); });
     var soundHome = soundBtn.parentNode, soundNext = soundBtn.nextSibling;
-    var navMq = window.matchMedia('(max-width: 860px)');
+    var navMq = window.matchMedia('(max-width: 960px)');
     function placeSound() {
       if (navMq.matches) {
         document.querySelector('.nav-inner').insertBefore(soundBtn, document.getElementById('hamburger'));
