@@ -721,6 +721,14 @@
     .c-label { grid-column: 1 / -1; }
     .avail-card { padding: 24px; }
   }
+  /* phones held upright: the black hole takes the top of the first screen and the text sits below it */
+  @media (max-width: 640px) and (orientation: portrait) {
+    .hero { align-items: flex-end; padding-block: 32svh 88px; }
+    .hero::before { background: linear-gradient(0deg, rgba(0, 0, 0, 0.78) 0%, rgba(0, 0, 0, 0.5) 42%, rgba(0, 0, 0, 0) 68%); }
+    .hero-actions { gap: 10px; }
+    .hero-scroll-wrap { display: none; }
+    .hero-actions .btn-primary, .hero-actions .btn-secondary { padding: 12px 18px; font-size: 0.88rem; }
+  }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     .pulse, .t-cursor, .scroll-line::after, .data-dot, .arch .link.dash, .orbit-g .ring { animation: none; }
@@ -1976,17 +1984,31 @@
         renderer.dispose();
         return;
       }
-      if (/intel.*\b(hd|uhd)\b|mali|adreno|powervr|videocore/i.test(gpuName)) lowTier = true;
-      var midTier = !lowTier && /intel|radeon(\(tm\))? graphics|radeon vega/i.test(gpuName);
-      // cap the pixels drawn per frame, so a 4K screen costs about the same as a laptop screen
-      var PX_BUDGET = lowTier ? 1.3e6 : midTier ? 2.6e6 : 4.6e6;
+      // phones (touch and a small screen) get their own profile. Their GPUs handle the full look well at
+      // about 2x sharpness, so they keep the glow, run it at half size, and get a dense disk
+      var phone = smallScr && !fine;
+      var phoneWeak = phone && /adreno[^0-9]*([1-5]\d\d|6[0-3]\d)\b|mali-(4\d\d|t\d+|g[35]\d)\b|powervr|videocore/i.test(gpuName);
+      if (phone) lowTier = false;
+      else if (/intel.*\b(hd|uhd)\b|mali|adreno|powervr|videocore/i.test(gpuName)) lowTier = true;
+      var midTier = !phone && !lowTier && /intel|radeon(\(tm\))? graphics|radeon vega/i.test(gpuName);
+      var tierName = phone ? (phoneWeak ? 'phone (budget GPU)' : 'phone') : lowTier ? 'low' : midTier ? 'mid' : 'high';
+      // per profile: pixels per frame, sharpness cap, particle counts, glow and the size the glow is computed at
+      var P = phone
+        ? (phoneWeak
+          ? { px: 0.9e6, prCap: 1.5, disk: 100000, icons: 3000, jets: 8000, stars: 9000, bloom: true, bloomScale: 0.5 }
+          : { px: 1.7e6, prCap: 2, disk: 170000, icons: 5000, jets: 12000, stars: 13000, bloom: true, bloomScale: 0.5 })
+        : lowTier
+          ? { px: 1.3e6, prCap: 1.25, disk: 70000, icons: 3000, jets: 6000, stars: 7000, bloom: false, bloomScale: 1 }
+          : { px: midTier ? 2.6e6 : 4.6e6, prCap: 1.75, disk: 220000, icons: 6000, jets: 16000, stars: 16000, bloom: true, bloomScale: 1 };
+      var lite = lowTier || phone;
+      // the pixel cap means a 4K screen costs about the same as a laptop screen
       var prScale = 1;
       function fitPR() {
-        var cap = Math.min(window.devicePixelRatio || 1, lowTier ? 1.25 : 1.75);
-        var fit = Math.sqrt(PX_BUDGET / Math.max(1, cvW() * cvH()));
+        var cap = Math.min(window.devicePixelRatio || 1, P.prCap);
+        var fit = Math.sqrt(P.px / Math.max(1, cvW() * cvH()));
         return Math.max(0.5, Math.min(cap, fit) * prScale);
       }
-      if (lowTier) root.classList.add('lite');
+      if (lite) root.classList.add('lite');
       // ?perf shows frame rate and quality settings, for checking the page on other machines
       var perf = { on: /[?&]perf\b/.test(location.search), steps: 0, acc: 0, n: 0, el: null };
       if (perf.on) {
@@ -2180,7 +2202,7 @@
         blending: T.AdditiveBlending
       });
       (function () {
-        var n = lowTier ? 7000 : 16000;
+        var n = P.stars;
         var pos = new Float32Array(n * 3), col = new Float32Array(n * 3);
         var size = new Float32Array(n), phase = new Float32Array(n), bright = new Float32Array(n);
         var tints = [[1, 1, 1], [0.86, 0.9, 1], [1, 0.92, 0.84], [1, 0.8, 0.66], [0.76, 0.84, 1]];
@@ -2212,8 +2234,8 @@
       // accretion disk. Particles fall in from a wide cloud while the page loads, then orbit.
       // Role 2 particles can fly out to form the contact icons.
       var R_IN = 1.9, R_OUT = 11;
-      var diskN = lowTier ? 70000 : 220000;
-      var ICN_N = lowTier ? 3000 : 6000;
+      var diskN = P.disk;
+      var ICN_N = P.icons;
       var diskMat = new T.ShaderMaterial({
         uniforms: {
           uTime: { value: 0 },
@@ -2517,7 +2539,7 @@
         depthWrite: false,
         blending: T.AdditiveBlending
       });
-      var jetN = lowTier ? 6000 : 16000;
+      var jetN = P.jets;
       var jetGeo = new T.BufferGeometry();
       (function () {
         var aOff = new Float32Array(jetN), aSpd = new Float32Array(jetN), aAng = new Float32Array(jetN);
@@ -2793,8 +2815,13 @@
           composer.setPixelRatio(renderer.getPixelRatio());
           composer.setSize(cvW(), cvH());
           composer.addPass(new T.RenderPass(scene, camera));
-          if (!lowTier && T.UnrealBloomPass) {
+          if (P.bloom && T.UnrealBloomPass) {
             bloomPass = new T.UnrealBloomPass(new T.Vector2(cvW(), cvH()), 0.95, 0.55, 0.52);
+            if (P.bloomScale < 1) {
+              // compute the glow at half size: it's a blur, so it looks the same for about a quarter of the work
+              var bloomSetSize = bloomPass.setSize.bind(bloomPass);
+              bloomPass.setSize = function (w, h) { bloomSetSize(Math.max(2, Math.round(w * P.bloomScale)), Math.max(2, Math.round(h * P.bloomScale))); };
+            }
             composer.addPass(bloomPass);
           }
           finalPass = new T.ShaderPass(FINAL);
@@ -2845,7 +2872,7 @@
         return {
           D: lerp(a.D, b.D, f), el: lerp(a.el, b.el, f), az: lerp(a.az, b.az, f),
           ox: wide ? lerp(a.ox, b.ox, f) : 0,
-          oy: wide ? lerp(a.oy, b.oy, f) : 0.16 * (1 - sm(4, 5, x)),
+          oy: wide ? lerp(a.oy, b.oy, f) : (W / H < 0.8 ? lerp(-0.27, 0.16, sm(0, 1, x)) : 0.16) * (1 - sm(4, 5, x)),
           fade: lerp(a.fade, b.fade, f), jet: lerp(a.jet, b.jet, f),
           tr: lerp(a.tint[0], b.tint[0], f), tg: lerp(a.tint[1], b.tint[1], f), tb: lerp(a.tint[2], b.tint[2], f)
         };
@@ -2893,7 +2920,9 @@
 
         var Dh = pose.D, elh = pose.el - myS * 0.05, azh = pose.az + mxS * 0.12;
         var Df = lerp(19, 10.5, fe), elf = 0.8, azf = -1.4 + t * 0.12;
-        var D = lerp(Df, Dh, k), el = lerp(elf, elh, k), az = lerp(azf, azh, k);
+        // tall phone screens: pull the camera back so the whole disk fits across the width
+        var pK = W / H < 0.8 ? Math.min(1.6, Math.max(1, 0.62 / (W / H))) : 1;
+        var D = lerp(Df, Dh, k) * pK, el = lerp(elf, elh, k), az = lerp(azf, azh, k);
         camera.position.set(D * Math.cos(el) * Math.sin(az), D * Math.sin(el), D * Math.cos(el) * Math.cos(az));
         camera.lookAt(0, 0, 0);
         camera.fov = 50 + warpAmt * 12;
@@ -3001,17 +3030,19 @@
       if (finalPass) finalPass.uniforms.uRes.value.set(W * renderer.getPixelRatio(), H * renderer.getPixelRatio());
 
       // automatic quality levels, least visible cut first:
-      // 1 sharpness 80%, 2 no glass blur, 3 no bloom, 4 half the particles, 5 sharpness 60%, 6 no effects pass,
-      // 7 black hole redrawn every third frame
+      // computer: 1 sharpness 80%, 2 no glass blur, 3 no glow, 4 half the particles, 5 sharpness 60%, 6 no effects pass
+      // phone:    1 sharpness 85%, 2 half the particles, 3 sharpness 70%, 4 no glow, 5 sharpness 60%, 6 no effects pass
+      // both:     7 black hole redrawn every third frame
       var composerFull = composer, level = 0, MAX_LEVEL = 7;
       function setLevel(n) {
         level = n;
-        var s = n >= 5 ? 0.6 : n >= 1 ? 0.8 : 1;
+        var s = phone ? (n >= 5 ? 0.6 : n >= 3 ? 0.7 : n >= 1 ? 0.85 : 1) : (n >= 5 ? 0.6 : n >= 1 ? 0.8 : 1);
         if (s !== prScale) { prScale = s; resize(); }
-        root.classList.toggle('lite', lowTier || n >= 2);
-        if (bloomPass) bloomPass.enabled = n < 3;
-        diskGeo.setDrawRange(0, n >= 4 ? Math.floor(diskN * 0.5) : diskN);
-        jetGeo.setDrawRange(0, n >= 4 ? Math.floor(jetN * 0.5) : jetN);
+        root.classList.toggle('lite', lite || n >= 2);
+        if (bloomPass) bloomPass.enabled = n < (phone ? 4 : 3);
+        var half = n >= (phone ? 2 : 4);
+        diskGeo.setDrawRange(0, half ? Math.floor(diskN * 0.5) : diskN);
+        jetGeo.setDrawRange(0, half ? Math.floor(jetN * 0.5) : jetN);
         composer = n >= 6 ? null : composerFull;
         try { localStorage.setItem('sn-quality-2', JSON.stringify({ gpu: gpuName, level: n })); } catch (e) {}
       }
@@ -3079,7 +3110,7 @@
         if (perf.acc < 1) return;
         renderer.getDrawingBufferSize(perfSize);
         perf.el.textContent = Math.round(perf.n / perf.acc) + ' fps\n' +
-          (lowTier ? 'low' : midTier ? 'mid' : 'high') + ' tier, level ' + level + ' of ' + MAX_LEVEL + (downLocked ? ' (browser holds 30 fps)' : upLocked ? ' (settled)' : '') + '\n' +
+          tierName + ' tier, level ' + level + ' of ' + MAX_LEVEL + (downLocked ? ' (browser holds 30 fps)' : upLocked ? ' (settled)' : '') + '\n' +
           perfSize.x + ' x ' + perfSize.y + ' px, bloom ' + (composer && bloomPass && bloomPass.enabled ? 'on' : 'off') +
           (root.classList.contains('lite') ? ', no glass blur' : '') + (level >= 7 ? ', black hole every 3rd frame' : '') +
           '\n' + (gpuName || 'unknown GPU').slice(0, 70);
