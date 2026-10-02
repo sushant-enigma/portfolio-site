@@ -34,7 +34,9 @@
     --card: #0b1122;
     --accent: #7cc4ff;
     --accent-2: #ffb454;
-    --accent-3: #b69cff;
+    --accent-hi: #b3e5ff;
+    --accent-deep: #4c96f0;
+    --silver: #cdd6e6;
     --text: #eef2fa;
     --text-2: #8e9ab3;
     --muted: #74819c;
@@ -96,7 +98,7 @@
   .loader-logo { font-family: var(--display); font-weight: 800; font-size: 2.4rem; letter-spacing: -0.04em; }
   .loader-logo span { color: var(--accent); }
   .loader-bar { width: 220px; height: 2px; background: rgba(255, 255, 255, 0.08); border-radius: 2px; overflow: hidden; }
-  .loader-fill { width: 0; height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-3)); transition: width 0.35s ease; }
+  .loader-fill { width: 0; height: 100%; background: linear-gradient(90deg, var(--accent-hi), var(--accent) 50%, var(--accent-deep)); transition: width 0.35s ease; }
   .loader-text { font-family: var(--mono); font-size: 0.78rem; color: var(--text-2); letter-spacing: 0.04em; }
   .loader.done { pointer-events: none; }
   /* enter screen: waits for one click, which also lets the browser start the sound */
@@ -277,7 +279,7 @@
   }
   .btn-primary {
     color: #05070f;
-    background: linear-gradient(135deg, #a9d8ff, var(--accent) 45%, var(--accent-3));
+    background: linear-gradient(135deg, var(--accent-hi), var(--accent) 50%, var(--accent-deep));
     box-shadow: 0 12px 32px -12px rgba(124, 196, 255, 0.65);
     transition: box-shadow 0.3s, transform 0.25s var(--ease);
   }
@@ -353,9 +355,12 @@
   .hero-title .line { display: block; overflow: hidden; padding-bottom: 0.07em; }
   .hero-title .line-inner { display: inline-block; }
   .accent {
-    background: linear-gradient(90deg, #a9d8ff, var(--accent) 40%, var(--accent-3));
+    background: linear-gradient(90deg, var(--accent-hi), var(--accent) 45%, var(--accent-deep));
     -webkit-background-clip: text; background-clip: text;
     color: transparent;
+    /* a text-shadow shows through transparent letters and greys the gradient; a drop-shadow sits behind them */
+    text-shadow: none;
+    filter: drop-shadow(0 2px 18px rgba(0, 0, 0, 0.6));
   }
   .hero-sub { max-width: 36em; margin-bottom: 2.2rem; font-size: 1.08rem; line-height: 1.65; color: var(--text-2); text-shadow: 0 1px 14px rgba(0, 0, 0, 0.8); }
   .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; }
@@ -367,7 +372,7 @@
   .arch .link { fill: none; stroke: rgba(124, 196, 255, 0.35); stroke-width: 1.2; }
   .arch .link.dash { stroke-dasharray: 4 5; animation: dash 1.2s linear infinite; }
   .arch .fan { fill: none; stroke: rgba(124, 196, 255, 0.16); stroke-width: 1; }
-  .arch .orbit-e { fill: none; stroke: rgba(182, 156, 255, 0.2); stroke-dasharray: 3 7; }
+  .arch .orbit-e { fill: none; stroke: rgba(124, 196, 255, 0.18); stroke-dasharray: 3 7; }
   @keyframes dash { to { stroke-dashoffset: -18; } }
   .hero-scroll-wrap { position: absolute; left: 0; right: 0; bottom: 26px; z-index: 3; display: flex; justify-content: center; pointer-events: none; }
   .hero-scroll {
@@ -465,7 +470,7 @@
   }
   .xp-card::before {
     content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-    background: linear-gradient(90deg, var(--accent), var(--accent-3));
+    background: linear-gradient(90deg, var(--accent-hi), var(--accent) 50%, var(--accent-deep));
     transform: scaleX(0); transform-origin: left;
     transition: transform 0.5s var(--ease);
   }
@@ -512,7 +517,7 @@
   }
   .proj-card::before {
     content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-    background: linear-gradient(90deg, var(--accent), var(--accent-3));
+    background: linear-gradient(90deg, var(--accent-hi), var(--accent) 50%, var(--accent-deep));
     transform: scaleX(0); transform-origin: left;
     transition: transform 0.5s var(--ease);
   }
@@ -538,7 +543,7 @@
     color: var(--accent); background: rgba(124, 196, 255, 0.1);
   }
   .ptag.amber { color: var(--accent-2); background: rgba(255, 180, 84, 0.12); }
-  .ptag.violet { color: var(--accent-3); background: rgba(182, 156, 255, 0.12); }
+  .ptag.silver { color: var(--silver); background: rgba(205, 214, 230, 0.1); }
   .proj-card h3 { font-family: var(--display); font-weight: 600; font-size: 1.3rem; line-height: 1.22; letter-spacing: -0.015em; }
   .proj-card p { font-size: 0.95rem; color: var(--text-2); }
   .proj-metrics { display: flex; flex-wrap: wrap; gap: 28px; margin-top: auto; padding-top: 16px; border-top: 1px solid var(--border); }
@@ -631,9 +636,9 @@
     width: 46px; height: 46px;
     display: grid; place-items: center;
     border-radius: 12px;
-    color: var(--accent-3);
-    background: rgba(182, 156, 255, 0.08);
-    border: 1px solid rgba(182, 156, 255, 0.2);
+    color: var(--silver);
+    background: rgba(205, 214, 230, 0.06);
+    border: 1px solid rgba(205, 214, 230, 0.16);
   }
   .now-icon svg { width: 22px; height: 22px; }
   .now-title { font-family: var(--display); font-weight: 600; font-size: 1.1rem; }
@@ -687,7 +692,7 @@
   .orbit-g { position: absolute; top: -70px; right: -70px; width: 300px; height: 300px; pointer-events: none; }
   @media (max-width: 520px) { .orbit-g { top: -135px; right: -135px; } }
   .orbit-g .ring { position: absolute; inset: 0; border: 1px dashed rgba(124, 196, 255, 0.25); border-radius: 50%; animation: spin 40s linear infinite; }
-  .orbit-g .ring.r2 { inset: 55px; border-color: rgba(182, 156, 255, 0.3); animation-duration: 26s; animation-direction: reverse; }
+  .orbit-g .ring.r2 { inset: 55px; border-color: rgba(205, 214, 230, 0.28); animation-duration: 26s; animation-direction: reverse; }
   .orbit-g .ring::after { content: ""; position: absolute; top: 50%; left: -5px; width: 9px; height: 9px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 14px var(--accent); }
   .orbit-g .ring.r2::after { background: var(--accent-2); box-shadow: 0 0 14px var(--accent-2); }
   .orbit-g .core { position: absolute; inset: 120px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #bfe2ff, var(--accent) 45%, #2b4f7a); box-shadow: 0 0 40px rgba(124, 196, 255, 0.4); }
@@ -753,6 +758,9 @@
   /* phones held upright: the black hole takes the top of the first screen and the text sits below it */
   @media (max-width: 640px) and (orientation: portrait) {
     .hero { align-items: flex-end; padding-block: 32svh 88px; }
+    .hero-content { container-type: inline-size; }
+    .hero-title { font-size: min(2.3rem, calc((100vw - 36px) / 11.4)); }
+    @supports (width: 1cqi) { .hero-title { font-size: min(2.3rem, 8.8cqi); } }
     .hero::before { background: linear-gradient(0deg, rgba(0, 0, 0, 0.78) 0%, rgba(0, 0, 0, 0.5) 42%, rgba(0, 0, 0, 0) 68%); }
     .hero-actions { gap: 10px; }
     .hero-scroll-wrap { display: none; }
@@ -765,11 +773,16 @@
     .bh, #fx, canvas, .loader, .rift, .sound-btn, .cursor-dot, .cursor-ring, .nav, .mobile-menu, .hero-scroll-wrap, .divider, .orbit-g, .hero-grid-overlay, .hero::before, .xp-bg { display: none !important; }
     [data-reveal], .hero-content, #heroLabel, #heroSub, #heroActions, .hero-title .line-inner, .arch .av { opacity: 1 !important; transform: none !important; }
     .word { color: var(--text) !important; }
-    .accent { background: none; color: var(--accent); }
+    .accent { background: none; color: var(--accent); filter: none; }
     .hero { min-height: 0; padding-block: 24px; }
     .section, .intro { padding-block: 28px; }
     .section.alt, .stats-bar, .now-item { background: none; }
     .proj-card, .xp-card, .c-row, .avail-card, .arch-box { box-shadow: none !important; break-inside: avoid; }
+  }
+  /* short phones (iPhone SE in Safari): start the text a little higher so the buttons still make the first screen */
+  @media (max-width: 640px) and (orientation: portrait) and (max-height: 600px) {
+    .hero { padding-top: 27svh; }
+    .hero-sub { margin-bottom: 1.6rem; }
   }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
@@ -919,13 +932,13 @@
           </g>
           <g class="av node">
             <rect x="140" y="220" width="180" height="38" rx="10"/>
-            <circle cx="160" cy="239" r="4" fill="#b69cff"/>
+            <circle cx="160" cy="239" r="4" fill="#cdd6e6"/>
             <text x="174" y="243">Kafka</text>
             <text class="tag" x="306" y="243" text-anchor="end">strimzi</text>
           </g>
           <g class="av">
             <path class="link" d="M230 258 V310"/>
-            <circle r="3.5" fill="#b69cff" filter="url(#glow)"><animateMotion dur="1.6s" begin="0.8s" repeatCount="indefinite" path="M230 258 V310"/></circle>
+            <circle r="3.5" fill="#cdd6e6" filter="url(#glow)"><animateMotion dur="1.6s" begin="0.8s" repeatCount="indefinite" path="M230 258 V310"/></circle>
           </g>
           <g class="av">
             <path class="link dash" d="M140 329 H108"/>
@@ -1122,7 +1135,7 @@
         </div>
         <div class="proj-cell" data-reveal>
           <article class="proj-card" data-tilt>
-            <div class="proj-head"><span class="proj-num">04</span><div class="proj-tags"><span class="ptag violet">Migration</span><span class="ptag amber">FinOps</span></div></div>
+            <div class="proj-head"><span class="proj-num">04</span><div class="proj-tags"><span class="ptag silver">Migration</span><span class="ptag amber">FinOps</span></div></div>
             <h3>Legacy Application Re-platforming</h3>
             <p>Moved an old application running on Python 2.7 and MySQL 8 onto smaller, cheaper infrastructure, with no change for the people who use it.</p>
             <div class="chips"><span>Python 2.7</span><span>MySQL 8</span><span>EC2</span></div>
@@ -1149,7 +1162,7 @@
         </div>
         <div class="proj-cell" data-reveal>
           <article class="proj-card" data-tilt>
-            <div class="proj-head"><span class="proj-num">07</span><div class="proj-tags"><span class="ptag violet">Data</span><span class="ptag">Reliability</span></div></div>
+            <div class="proj-head"><span class="proj-num">07</span><div class="proj-tags"><span class="ptag silver">Data</span><span class="ptag">Reliability</span></div></div>
             <h3>PostgreSQL DR with pgBackRest</h3>
             <p>Designed disaster recovery for self-managed Postgres on EC2 with pgBackRest physical and logical backups instead of streaming replicas, so recovery stays predictable without paying for a second database. The S3 path is locked so backups can't be deleted.</p>
             <div class="chips"><span>PostgreSQL</span><span>pgBackRest</span><span>S3</span><span>IAM</span></div>
@@ -1176,7 +1189,7 @@
         </div>
         <div class="proj-cell" data-reveal>
           <article class="proj-card" data-tilt>
-            <div class="proj-head"><span class="proj-num">10</span><div class="proj-tags"><span class="ptag violet">Open source</span></div></div>
+            <div class="proj-head"><span class="proj-num">10</span><div class="proj-tags"><span class="ptag silver">Open source</span></div></div>
             <h3>Portfolio Site on Cloudflare</h3>
             <p>Built and host this site on Cloudflare's free plan. Every script is pinned and hashed under a strict CSP, the background is rendered once and served as video, and a daily GitHub workflow checks the live site from outside.</p>
             <a class="proj-link" href="https://github.com/sushant-enigma/portfolio-site" target="_blank" rel="noopener">View on GitHub ↗</a>
@@ -1199,7 +1212,7 @@
       <div class="proj-grid">
         <div class="proj-cell" data-reveal>
           <article class="proj-card" data-tilt>
-            <div class="proj-head"><span class="proj-num">01</span><div class="proj-tags"><span class="ptag">Postgres</span><span class="ptag violet">Linux</span></div></div>
+            <div class="proj-head"><span class="proj-num">01</span><div class="proj-tags"><span class="ptag">Postgres</span><span class="ptag silver">Linux</span></div></div>
             <h3>PostgreSQL Connection Failures</h3>
             <p>Services across one cluster kept dropping their Postgres connections with "unexpected EOF", which pointed at the network. I traced it to the database host instead: strict memory overcommit with no swap left Postgres about 140 MB to start new connections. Fixed with one kernel setting and no restart.</p>
             <div class="chips"><span>PostgreSQL</span><span>Linux</span><span>OKE</span></div>
@@ -1208,7 +1221,7 @@
         </div>
         <div class="proj-cell" data-reveal>
           <article class="proj-card" data-tilt>
-            <div class="proj-head"><span class="proj-num">02</span><div class="proj-tags"><span class="ptag">Kubernetes</span><span class="ptag violet">Kafka</span></div></div>
+            <div class="proj-head"><span class="proj-num">02</span><div class="proj-tags"><span class="ptag">Kubernetes</span><span class="ptag silver">Kafka</span></div></div>
             <h3>Kafka Consumer Lag Caused by VPA</h3>
             <p>A consumer group kept rebalancing and lag reached 20 million messages. VPA had cut the decoder pods from 500m to about 53m CPU, so batches ran past the poll timeout and the consumers were dropped from the group. I pinned CPU at 200m and moved VPA to recommendation-only mode.</p>
             <div class="chips"><span>VPA</span><span>KEDA</span><span>Kafka</span></div>
@@ -1217,7 +1230,7 @@
         </div>
         <div class="proj-cell" data-reveal>
           <article class="proj-card" data-tilt>
-            <div class="proj-head"><span class="proj-num">03</span><div class="proj-tags"><span class="ptag violet">MQTT</span></div></div>
+            <div class="proj-head"><span class="proj-num">03</span><div class="proj-tags"><span class="ptag silver">MQTT</span></div></div>
             <h3>EMQX Cluster Cold-Start Failure</h3>
             <p>After a full outage no broker would rejoin, because the boot script stopped any node that couldn't find a peer. I bootstrapped one node manually, joined the rest to it and restored the configuration. The investigation also showed the same check had been producing empty 187-byte backups.</p>
             <div class="chips"><span>EMQX</span><span>Auto Scaling</span><span>user data</span></div>
