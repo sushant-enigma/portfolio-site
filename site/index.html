@@ -1997,21 +1997,28 @@
       lp.type = 'lowpass'; lp.frequency.value = 200; lp.Q.value = 0.5;
       lp.connect(bus);
       snd.filter = lp;
-      [[55, 'sawtooth', 0.08], [55.4, 'triangle', 0.1], [82.41, 'triangle', 0.07], [110, 'sine', 0.04]].forEach(function (o) {
+      // spread a voice across left and right; older browsers without StereoPanner get it in the middle
+      function panned(node, pan, dest) {
+        if (ac.createStereoPanner) {
+          var pn = ac.createStereoPanner();
+          pn.pan.value = pan;
+          node.connect(pn); pn.connect(dest);
+        } else {
+          node.connect(dest);
+        }
+      }
+      snd.voices = [];
+      [[55, 'sawtooth', 0.08, -0.35], [55.4, 'triangle', 0.1, 0.35], [82.41, 'triangle', 0.07, -0.15], [110, 'sine', 0.04, 0.2]].forEach(function (o) {
         var osc = ac.createOscillator();
         osc.type = o[1];
         osc.frequency.value = o[0];
         var g = ac.createGain();
         g.gain.value = o[2];
-        osc.connect(g); g.connect(lp);
+        osc.connect(g);
+        panned(g, o[3], lp);
         osc.start();
+        snd.voices.push({ osc: osc, gain: g, base: o[2] });
       });
-      var lfo = ac.createOscillator();
-      lfo.frequency.value = 0.05;
-      var lfoG = ac.createGain();
-      lfoG.gain.value = 60;
-      lfo.connect(lfoG); lfoG.connect(lp.frequency);
-      lfo.start();
 
       var shimmerLp = ac.createBiquadFilter();
       shimmerLp.type = 'lowpass'; shimmerLp.frequency.value = 700;
@@ -2019,6 +2026,7 @@
       var shimmer = ac.createGain();
       shimmer.gain.value = 0.005;
       shimmer.connect(shimmerLp);
+      snd.shimmer = shimmer;
       [196.0, 246.94, 293.66].forEach(function (f, n) {
         var o = ac.createOscillator();
         o.type = 'sine';
@@ -2026,7 +2034,7 @@
         var g = ac.createGain();
         g.gain.value = 0.5;
         var trem = ac.createOscillator();
-        trem.frequency.value = 0.07 + n * 0.03;
+        trem.frequency.value = 0.045 + Math.random() * 0.08;   // a different, unrelated rate each visit
         var tg = ac.createGain();
         tg.gain.value = 0.5;
         trem.connect(tg); tg.connect(g.gain);
@@ -2034,36 +2042,67 @@
         o.start(); trem.start();
       });
 
-      var nb = ac.createBuffer(1, ac.sampleRate * 3, ac.sampleRate);
-      var nd = nb.getChannelData(0), last = 0;
-      for (var j = 0; j < nd.length; j++) {
-        var white = Math.random() * 2 - 1;
-        last = (last + 0.02 * white) / 1.02;
-        nd[j] = last * 3.5;
+      // brown noise that loops without a seam: the last half second is blended into the start
+      function brownLoop(seconds) {
+        var n = Math.floor(ac.sampleRate * seconds), f = Math.floor(ac.sampleRate * 0.5);
+        var raw = new Float32Array(n + f), last = 0, k;
+        for (k = 0; k < raw.length; k++) {
+          last = (last + 0.02 * (Math.random() * 2 - 1)) / 1.02;
+          raw[k] = last * 3.5;
+        }
+        for (k = 0; k < f; k++) raw[k] = raw[k] * (k / f) + raw[n + k] * (1 - k / f);
+        var b = ac.createBuffer(1, n, ac.sampleRate);
+        b.getChannelData(0).set(raw.subarray(0, n));
+        return b;
       }
-      var ns = ac.createBufferSource();
-      ns.buffer = nb;
-      ns.loop = true;
-      var bp = ac.createBiquadFilter();
-      bp.type = 'bandpass'; bp.frequency.value = 320; bp.Q.value = 0.8;
-      var ng = ac.createGain();
-      ng.gain.value = 0.03;
-      ns.connect(bp); bp.connect(ng); ng.connect(bus);
-      ns.start();
-      snd.bp = bp;
-      snd.noise = ng;
-      snd.noiseBuf = nb;
+      // 29 s on the left and 37 s on the right: together they only line up again after about 18 minutes
+      snd.noiseLayers = [[29, -0.6, 300], [37, 0.6, 360]].map(function (o) {
+        var src = ac.createBufferSource();
+        src.buffer = brownLoop(o[0]);
+        src.loop = true;
+        var bp = ac.createBiquadFilter();
+        bp.type = 'bandpass'; bp.frequency.value = o[2]; bp.Q.value = 0.8;
+        var g = ac.createGain();
+        g.gain.value = 0.024;
+        src.connect(bp); bp.connect(g);
+        panned(g, o[1], bus);
+        src.start(0, Math.random() * o[0]);
+        return { bp: bp, gain: g };
+      });
       var sfx = ac.createGain();
       sfx.gain.value = 1;
       sfx.connect(bus);
       snd.sfx = sfx;
+      drift();
       return true;
     }
+    // every 7 to 16 seconds, glide the tone, the noise band, each layer's level and a little detune
+    // towards new random values, over several seconds, so the sound keeps changing without repeating
+    function drift() {
+      if (!snd.ctx) return;
+      var t = snd.ctx.currentTime;
+      function glide(param, lo, hi, secs) { param.setTargetAtTime(lo + Math.random() * (hi - lo), t, secs); }
+      glide(snd.filter.frequency, 150, 300, 6);
+      glide(snd.shimmer.gain, 0.002, 0.008, 9);
+      snd.noiseLayers.forEach(function (n) {
+        glide(n.bp.frequency, 200, 520, 8);
+        glide(n.gain.gain, 0.014, 0.036, 7);
+      });
+      snd.voices.forEach(function (v) {
+        glide(v.gain.gain, v.base * 0.6, v.base * 1.25, 10);
+        glide(v.osc.detune, -9, 9, 12);
+      });
+      clearTimeout(snd.driftTimer);
+      snd.driftTimer = setTimeout(drift, 7000 + Math.random() * 9000);
+    }
     function paintSound() {
-      soundBtn.classList.toggle('on', snd.want);
-      soundBtn.classList.toggle('playing', snd.on);
-      soundBtn.setAttribute('aria-pressed', snd.want ? 'true' : 'false');
-      soundLabel.textContent = snd.want ? 'sound on' : 'sound off';
+      var playing = snd.want && snd.on;
+      soundBtn.classList.toggle('on', playing);
+      soundBtn.classList.toggle('playing', playing);
+      soundBtn.setAttribute('aria-pressed', playing ? 'true' : 'false');
+      // until the browser lets audio start, say so instead of claiming it's on
+      soundLabel.textContent = playing ? 'sound on' : snd.want ? 'tap for sound' : 'sound off';
+      soundBtn.setAttribute('aria-label', playing ? 'Turn sound off' : 'Turn sound on');
     }
     function setSound(on) {
       snd.want = on;
@@ -2080,11 +2119,11 @@
       }
       paintSound();
     }
-    soundBtn.addEventListener('click', function () { setSound(!snd.want); });
+    soundBtn.addEventListener('click', function () { setSound(!(snd.want && snd.on)); });
     paintSound();
     // sound is on by default, but browsers only allow audio after a gesture,
     // so it starts on the first tap, click or key press anywhere except the toggle itself
-    var gestureEvents = ['pointerdown', 'touchend', 'click', 'keydown'];
+    var gestureEvents = ['pointerdown', 'pointerup', 'mousedown', 'touchend', 'click', 'keydown'];
     function unhookGesture() {
       gestureEvents.forEach(function (n) { window.removeEventListener(n, onGesture, true); });
     }
