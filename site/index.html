@@ -1486,52 +1486,96 @@
     var riftEl = document.getElementById('rift');
     var riftCv = riftEl ? document.getElementById('riftCanvas') : null;
     var rctx = riftCv ? riftCv.getContext('2d') : null;
-    var RW = 0, RH = 0, RPR = 1, riftStars = null, riftSparks = [];
-    var RSEG = 140;
-    // the jagged shape of each edge: a smoothed random walk with a few sharp splinters, plus a flicker phase per point
+    var RW = 0, RH = 0, RPR = 1, riftStars = null, riftNeb = null, riftSparks = [], riftShards = [];
+    var RSEG = 96;
+    // a torn edge: large irregular bends plus small alternating serrations, like ripped paper
     function riftEdge() {
       var pts = [], v = 0;
       for (var i = 0; i <= RSEG; i++) {
-        v = v * 0.82 + (Math.random() * 2 - 1) * 0.55;
-        pts.push({ base: v + (Math.random() < 0.05 ? (Math.random() * 2 - 1) * 2.2 : 0), ph: Math.random() * 6.283, sp: 0.8 + Math.random() * 2.2 });
+        v = v * 0.86 + (Math.random() * 2 - 1) * 0.5;
+        pts.push({ big: v, small: (i % 2 ? 1 : -1) * (0.4 + Math.random() * 0.9), ph: Math.random() * 6.283, sp: 0.6 + Math.random() * 1.6 });
       }
       return pts;
     }
     var riftL = riftEdge(), riftR = riftEdge();
     var riftBendP = [Math.random() * 6.283, Math.random() * 6.283];
+    var riftTall = window.matchMedia('(max-aspect-ratio: 4/5)').matches;
+    var riftImg = new Image();
+    riftImg.src = riftTall ? '/media/portrait.jpg' : '/media/landscape.jpg';
+    var RIFT_HOLE = riftTall ? [0.5, 0.23] : [0.66, 0.48];   // where the hole sits in each first frame
+    // four-pointed cartoon sparkle
+    function twinkle(c, x, y, r) {
+      c.beginPath();
+      c.moveTo(x, y - r); c.quadraticCurveTo(x, y, x + r, y); c.quadraticCurveTo(x, y, x, y + r);
+      c.quadraticCurveTo(x, y, x - r, y); c.quadraticCurveTo(x, y, x, y - r);
+      c.fill();
+    }
     function riftSize() {
       RPR = Math.min(window.devicePixelRatio || 1, 1.5);
       RW = window.innerWidth; RH = window.innerHeight;
       riftCv.width = Math.round(RW * RPR); riftCv.height = Math.round(RH * RPR);
+      // the starfield outside the tear, drawn once
       riftStars = document.createElement('canvas');
       riftStars.width = riftCv.width; riftStars.height = riftCv.height;
       var sx = riftStars.getContext('2d');
       sx.setTransform(RPR, 0, 0, RPR, 0, 0);
       sx.fillStyle = '#020309'; sx.fillRect(0, 0, RW, RH);
-      var n = Math.round(RW * RH / 2400);
-      for (var i = 0; i < n; i++) {
+      var n = Math.round(RW * RH / 2600), i;
+      for (i = 0; i < n; i++) {
         var a = Math.random();
-        sx.fillStyle = 'rgba(220, 230, 255, ' + (0.12 + a * a * 0.7).toFixed(3) + ')';
-        sx.beginPath(); sx.arc(Math.random() * RW, Math.random() * RH, Math.random() < 0.05 ? 1.3 : 0.65, 0, 6.2832); sx.fill();
+        sx.fillStyle = 'rgba(220, 230, 255, ' + (0.1 + a * a * 0.6).toFixed(3) + ')';
+        sx.beginPath(); sx.arc(Math.random() * RW, Math.random() * RH, Math.random() < 0.05 ? 1.2 : 0.6, 0, 6.2832); sx.fill();
       }
+      // the nebula seen through the tear, drawn once: soft colour clouds, dust and a few bright stars
+      var nw = Math.round(Math.min(RW, RH) * 0.9), nh = Math.round(RH * 0.9);
+      riftNeb = document.createElement('canvas');
+      riftNeb.width = Math.round(nw * RPR); riftNeb.height = Math.round(nh * RPR);
+      var nx = riftNeb.getContext('2d');
+      nx.setTransform(RPR, 0, 0, RPR, 0, 0);
+      var bg = nx.createLinearGradient(0, 0, 0, nh);
+      bg.addColorStop(0, '#03050d'); bg.addColorStop(0.5, '#08101f'); bg.addColorStop(1, '#03050d');
+      nx.fillStyle = bg; nx.fillRect(0, 0, nw, nh);
+      nx.globalCompositeOperation = 'lighter';
+      var cols = [[124, 196, 255], [200, 215, 255], [255, 225, 190]];
+      for (i = 0; i < 70; i++) {
+        var col = cols[i % cols.length], bx = nw * (0.2 + Math.random() * 0.6), by = Math.random() * nh, br = 20 + Math.random() * nw * 0.35;
+        var gg = nx.createRadialGradient(bx, by, 0, bx, by, br);
+        gg.addColorStop(0, 'rgba(' + col.join(',') + ', ' + (0.03 + Math.random() * 0.07).toFixed(3) + ')');
+        gg.addColorStop(1, 'rgba(' + col.join(',') + ', 0)');
+        nx.fillStyle = gg; nx.fillRect(bx - br, by - br, br * 2, br * 2);
+      }
+      for (i = 0; i < 520; i++) {
+        nx.fillStyle = 'rgba(235, 240, 255, ' + (0.15 + Math.random() * 0.6).toFixed(3) + ')';
+        nx.fillRect(Math.random() * nw, Math.random() * nh, Math.random() < 0.1 ? 1.6 : 0.9, Math.random() < 0.1 ? 1.6 : 0.9);
+      }
+      nx.fillStyle = 'rgba(255, 250, 235, 0.95)';
+      for (i = 0; i < 16; i++) twinkle(nx, nw * (0.3 + Math.random() * 0.4), Math.random() * nh, 2.5 + Math.random() * 4.5);
+      nx.globalCompositeOperation = 'source-over';
+      // fragments of torn space drifting off the edges
+      riftShards = [];
+      for (i = 0; i < 11; i++) riftShards.push(newShard());
+    }
+    function newShard() {
+      return { u: 0.12 + Math.random() * 0.76, side: Math.random() < 0.5 ? -1 : 1, d: 6 + Math.random() * 30, vd: 2 + Math.random() * 6,
+               bob: Math.random() * 6.283, s: 2.5 + Math.random() * 5, shape: [1, 0.45 + Math.random() * 0.4, 0.8 + Math.random() * 0.3, 0.35 + Math.random() * 0.4, 0.7 + Math.random() * 0.3], rot: Math.random() * 6.283, vr: (Math.random() - 0.5) * 0.8, life: 0, max: 4 + Math.random() * 5 };
     }
     function riftShape(t) {
       var o = riftState.open, e = o < 0.5 ? 4 * o * o * o : 1 - Math.pow(-2 * o + 2, 3) / 2;
-      var intro = Math.min(1, riftState.intro);
-      var top = RH * (0.12 + 0.08 * (1 - intro)) * (1 - e) - RH * 0.7 * e;
-      var bot = RH * (0.68 - 0.08 * (1 - intro)) * (1 - e) + RH * 1.7 * e;
-      var cx = RW / 2, base = Math.min(RW, RH) * 0.009 * intro * (1 + riftState.flash * 0.3);
-      var tilt = RW * 0.03, bendA = Math.min(RW, RH) * 0.02;
+      var intro = Math.min(1, riftState.intro), ie = 1 - Math.pow(1 - intro, 3);
+      var top = RH * (0.12 + 0.1 * (1 - ie)) * (1 - e) - RH * 0.7 * e;
+      var bot = RH * (0.7 - 0.1 * (1 - ie)) * (1 - e) + RH * 1.7 * e;
+      var cx = RW / 2, base = Math.min(RW, RH) * 0.034 * ie * (1 + riftState.flash * 0.15);
+      var tilt = RW * 0.03, bendA = Math.min(RW, RH) * 0.025;
       var left = [], right = [];
       for (var i = 0; i <= RSEG; i++) {
         var u = i / RSEG, y = top + (bot - top) * u;
-        var taper = Math.pow(Math.sin(Math.PI * u), 0.75), wide = Math.pow(Math.sin(Math.PI * u), 0.3);
+        var taper = Math.pow(Math.sin(Math.PI * u), 0.9), wide = Math.pow(Math.sin(Math.PI * u), 0.3);
         var half = base * taper + e * RW * 0.85 * wide;
-        var amp = (2.5 + 7 * taper) * (1 + e * 2.5);
+        var bigA = base * 0.5 + e * 40, smallA = 2.2 + e * 5;
         var x0 = cx + (u - 0.5) * tilt + (Math.sin(u * Math.PI * 1.3 + riftBendP[0]) * 0.65 + Math.sin(u * Math.PI * 3.1 + riftBendP[1]) * 0.25) * bendA;
         var l = riftL[i], r = riftR[i];
-        left.push([x0 - half - (l.base + Math.sin(t * l.sp + l.ph) * 0.35) * amp * taper, y]);
-        right.push([x0 + half + (r.base + Math.sin(t * r.sp + r.ph) * 0.35) * amp * taper, y]);
+        left.push([x0 - half - (l.big * bigA + l.small * smallA + Math.sin(t * l.sp + l.ph) * 0.6) * taper, y]);
+        right.push([x0 + half + (r.big * bigA + r.small * smallA + Math.sin(t * r.sp + r.ph) * 0.6) * taper, y]);
       }
       return { left: left, right: right, top: top, bot: bot, cx: cx, e: e };
     }
@@ -1554,50 +1598,88 @@
       c.setTransform(RPR, 0, 0, RPR, 0, 0);
       c.globalCompositeOperation = 'source-over';
       c.drawImage(riftStars, 0, 0, RW, RH);
-      // light spilling out of the tear
+      // light spilling out: warm close to the tear, cooler further out
       var cy = (sh.top + sh.bot) / 2, len = Math.max(1, sh.bot - sh.top);
       c.save();
-      c.translate(sh.cx, cy); c.scale(0.42, 1);
-      var g = c.createRadialGradient(0, 0, 0, 0, 0, len * 0.62);
-      g.addColorStop(0, 'rgba(160, 200, 255, ' + (0.26 * glow).toFixed(3) + ')');
-      g.addColorStop(0.45, 'rgba(130, 110, 255, ' + (0.08 * glow).toFixed(3) + ')');
+      c.translate(sh.cx, cy); c.scale(0.5, 1);
+      var g = c.createRadialGradient(0, 0, 0, 0, 0, len * 0.65);
+      g.addColorStop(0, 'rgba(255, 236, 210, ' + (0.14 * glow).toFixed(3) + ')');
+      g.addColorStop(0.35, 'rgba(124, 196, 255, ' + (0.08 * glow).toFixed(3) + ')');
       g.addColorStop(1, 'rgba(0, 0, 0, 0)');
       c.fillStyle = g; c.fillRect(-len, -len, len * 2, len * 2);
       c.restore();
-      var gap = riftPath(sh.left.concat(sh.right.slice().reverse()), true);
-      // cut the tear out so the site behind shows through it
+      var outline = sh.left.concat(sh.right.slice().reverse());
+      var gap = riftPath(outline, true);
+      // cut the tear out, so the site behind shows through once the nebula fades
       c.globalCompositeOperation = 'destination-out';
-      c.fillStyle = '#000';   // fully opaque, so the cut is complete
+      c.fillStyle = '#000';
       c.fill(gap);
       c.globalCompositeOperation = 'source-over';
-      // the white-hot inside, fading away as the tear opens
-      var core = st.intro * (1 - Math.min(1, e / 0.13));
-      core = core * core * (3 - 2 * core);
-      if (core > 0.01) { c.fillStyle = 'rgba(222, 236, 255, ' + core.toFixed(3) + ')'; c.fill(gap); }
-      // glowing edges
-      var edgeA = Math.max(0, (st.intro * 0.9 + st.flash * 0.5) * (1 - e * 0.85));
+      // the nebula inside the tear, with light glowing in from the torn edge
+      var neb = st.intro * (1 - Math.min(1, e / 0.22));
+      if (neb > 0.01 && riftNeb) {
+        c.save();
+        c.clip(gap);
+        c.globalAlpha = neb;
+        var drift = Math.sin(st.t * 0.12) * 5;
+        if (riftImg.complete && riftImg.naturalWidth) {
+          var iw, ih;
+          if (riftTall) { iw = RW * 1.15; ih = iw * riftImg.naturalHeight / riftImg.naturalWidth; }
+          else { ih = RH * 1.1; iw = ih * riftImg.naturalWidth / riftImg.naturalHeight; }
+          c.drawImage(riftImg, sh.cx - RIFT_HOLE[0] * iw + drift, cy - RIFT_HOLE[1] * ih, iw, ih);
+        } else {
+          var nw = riftNeb.width / RPR, nh = riftNeb.height / RPR;
+          c.drawImage(riftNeb, sh.cx - nw / 2 + drift, cy - nh / 2, nw, nh);
+        }
+        c.lineJoin = 'round';
+        c.strokeStyle = 'rgba(200, 225, 255, 0.16)'; c.lineWidth = 14; c.stroke(gap);
+        c.strokeStyle = 'rgba(255, 240, 222, 0.28)'; c.lineWidth = 4; c.stroke(gap);
+        c.restore();
+      }
+      // the glowing rim: a cool halo, a warm glow, then a bright edge
+      var edgeA = Math.max(0, (st.intro + st.flash * 0.5) * (1 - e * 0.85));
       if (edgeA > 0.01) {
-        var pl = riftPath(sh.left, false), pr = riftPath(sh.right, false);
-        c.lineJoin = 'round'; c.lineCap = 'round';
-        c.shadowColor = 'rgba(110, 170, 255, 0.95)'; c.shadowBlur = 30 + st.flash * 30;
-        c.strokeStyle = 'rgba(140, 185, 255, ' + (0.55 * edgeA).toFixed(3) + ')'; c.lineWidth = 3;
-        c.stroke(pl); c.stroke(pr);
-        c.shadowColor = 'rgba(182, 156, 255, 0.9)'; c.shadowBlur = 12;
-        c.strokeStyle = 'rgba(255, 255, 255, ' + (0.9 * edgeA).toFixed(3) + ')'; c.lineWidth = 1.2;
-        c.stroke(pl); c.stroke(pr);
+        c.lineJoin = 'round';
+        c.shadowColor = 'rgba(124, 196, 255, 0.85)'; c.shadowBlur = 38;
+        c.strokeStyle = 'rgba(124, 196, 255, ' + (0.24 * edgeA).toFixed(3) + ')'; c.lineWidth = 8; c.stroke(gap);
+        c.shadowColor = 'rgba(255, 228, 196, 0.9)'; c.shadowBlur = 18 + st.flash * 30;
+        c.strokeStyle = 'rgba(255, 226, 192, ' + (0.7 * edgeA).toFixed(3) + ')'; c.lineWidth = 3.5; c.stroke(gap);
+        c.shadowColor = 'rgba(255, 248, 236, 1)'; c.shadowBlur = 5;
+        c.strokeStyle = 'rgba(255, 248, 236, ' + (0.95 * edgeA).toFixed(3) + ')'; c.lineWidth = 1.4; c.stroke(gap);
         c.shadowBlur = 0;
       }
-      // sparks pulled off the edges
-      var rate = st.opening ? 0 : 34 * st.intro;
+      // fragments of torn space drifting away from the edges
+      for (var q = 0; q < riftShards.length; q++) {
+        var f = riftShards[q];
+        f.life += dt; f.d += f.vd * dt * (st.opening ? 30 : 1); f.rot += f.vr * dt;
+        if (f.life > f.max && !st.opening) { riftShards[q] = newShard(); continue; }
+        var idx = Math.min(RSEG, Math.round(f.u * RSEG)), pt = (f.side < 0 ? sh.left : sh.right)[idx];
+        var fx = pt[0] + f.side * f.d, fy = pt[1] + Math.sin(st.t * 0.8 + f.bob) * 3;
+        var fa = Math.min(1, f.life / 0.8) * Math.min(1, (f.max - f.life) / 1.2 + (st.opening ? 1 : 0)) * st.intro * (1 - e);
+        if (fa <= 0.01) continue;
+        c.save();
+        c.translate(fx, fy); c.rotate(f.rot); c.globalAlpha = fa;
+        c.beginPath();
+        for (var v = 0; v < f.shape.length; v++) {
+          var ang = v / f.shape.length * 6.283, rr = f.s * f.shape[v];
+          if (v) c.lineTo(Math.cos(ang) * rr, Math.sin(ang) * rr); else c.moveTo(Math.cos(ang) * rr, Math.sin(ang) * rr);
+        }
+        c.closePath();
+        c.fillStyle = '#060a16'; c.fill();
+        c.strokeStyle = 'rgba(215, 228, 255, 0.55)'; c.lineWidth = 0.9; c.stroke();
+        c.restore();
+      }
+      // sparks: small dots and four-pointed twinkles
+      var rate = st.opening ? 0 : 26 * st.intro;
       for (var k = Math.floor(rate * dt + Math.random()); k > 0; k--) {
-        var side = Math.random() < 0.5, pts = side ? sh.left : sh.right, q = pts[Math.floor(Math.random() * pts.length)];
-        riftSparks.push({ x: q[0], y: q[1], vx: (side ? -1 : 1) * (8 + Math.random() * 30), vy: (Math.random() - 0.5) * 16, life: 0, max: 1 + Math.random() * 1.8, r: 0.5 + Math.random() * 1.1 });
+        var side = Math.random() < 0.5, pts = side ? sh.left : sh.right, w = pts[Math.floor(Math.random() * pts.length)];
+        riftSparks.push({ x: w[0], y: w[1], vx: (side ? -1 : 1) * (8 + Math.random() * 30), vy: (Math.random() - 0.5) * 16, life: 0, max: 1 + Math.random() * 1.8, r: 0.6 + Math.random() * 1.2, tw: Math.random() < 0.3 });
       }
       if (st.opening && !st.burst) {
         st.burst = true;
-        for (var b = 0; b < 160; b++) {
-          var sd = Math.random() < 0.5, pp = sd ? sh.left : sh.right, w = pp[Math.floor(Math.random() * pp.length)];
-          riftSparks.push({ x: w[0], y: w[1], vx: (sd ? -1 : 1) * (60 + Math.random() * 260), vy: (Math.random() - 0.5) * 90, life: 0, max: 0.6 + Math.random() * 0.9, r: 0.6 + Math.random() * 1.4 });
+        for (var bb = 0; bb < 160; bb++) {
+          var sd = Math.random() < 0.5, pp = sd ? sh.left : sh.right, ww = pp[Math.floor(Math.random() * pp.length)];
+          riftSparks.push({ x: ww[0], y: ww[1], vx: (sd ? -1 : 1) * (60 + Math.random() * 260), vy: (Math.random() - 0.5) * 90, life: 0, max: 0.6 + Math.random() * 0.9, r: 0.8 + Math.random() * 1.6, tw: Math.random() < 0.35 });
         }
       }
       c.globalCompositeOperation = 'lighter';
@@ -1605,9 +1687,10 @@
         var sp = riftSparks[m];
         sp.life += dt; sp.x += sp.vx * dt; sp.y += sp.vy * dt; sp.vx *= 0.985;
         if (sp.life >= sp.max) { riftSparks.splice(m, 1); continue; }
-        var fa = Math.sin(Math.PI * sp.life / sp.max) * 0.85 * (1 - e * 0.5);
-        c.fillStyle = 'rgba(205, 225, 255, ' + fa.toFixed(3) + ')';
-        c.fillRect(sp.x - sp.r, sp.y - sp.r, sp.r * 2, sp.r * 2);
+        var pa = Math.sin(Math.PI * sp.life / sp.max) * 0.9 * (1 - e * 0.5);
+        c.fillStyle = sp.tw ? 'rgba(255, 240, 215, ' + pa.toFixed(3) + ')' : 'rgba(205, 225, 255, ' + pa.toFixed(3) + ')';
+        if (sp.tw) twinkle(c, sp.x, sp.y, sp.r * 3.2);
+        else c.fillRect(sp.x - sp.r, sp.y - sp.r, sp.r * 2, sp.r * 2);
       }
       c.globalCompositeOperation = 'source-over';
     }
