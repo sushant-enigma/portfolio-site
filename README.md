@@ -44,6 +44,15 @@ To re-render (needs Playwright with Chromium, Pillow and ffmpeg):
 python render/render.py && ./render/encode.sh
 ```
 
+## Enter screen and sound
+
+Browsers only allow audio after the visitor clicks or taps, so the site opens on an Enter screen. It shows a tear in space, drawn on a 2D canvas, with the black hole's first frame showing through it. Enter starts the ambient sound and rips the tear open onto the site. "Enter without sound" opens the site silently and is remembered, so those visitors skip the screen next time, as does anyone with reduced motion turned on.
+
+The ambient sound is generated in the browser with Web Audio:
+- a low drone
+- two long brown-noise layers, 29 s and 37 s, panned left and right, which only line up again after about 18 minutes
+- slow random drift in tone and level, so it never settles into a loop
+
 ## Checks
 
 - `build`, on every push: builds the site and fails on JavaScript syntax errors or unpinned CDN scripts.
