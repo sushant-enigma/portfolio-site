@@ -2097,11 +2097,11 @@
     }
     function paintSound() {
       var playing = snd.want && snd.on;
-      soundBtn.classList.toggle('on', playing);
+      // on by default; the bars only move once the browser has actually let the audio start
+      soundBtn.classList.toggle('on', snd.want);
       soundBtn.classList.toggle('playing', playing);
-      soundBtn.setAttribute('aria-pressed', playing ? 'true' : 'false');
-      // until the browser lets audio start, say so instead of claiming it's on
-      soundLabel.textContent = playing ? 'sound on' : snd.want ? 'tap for sound' : 'sound off';
+      soundBtn.setAttribute('aria-pressed', snd.want ? 'true' : 'false');
+      soundLabel.textContent = snd.want ? 'sound on' : 'sound off';
       soundBtn.setAttribute('aria-label', playing ? 'Turn sound off' : 'Turn sound on');
     }
     function setSound(on) {
@@ -2114,7 +2114,7 @@
         if (on && ac.state === 'suspended') ac.resume();
         snd.master.gain.cancelScheduledValues(now);
         snd.master.gain.setValueAtTime(snd.master.gain.value, now);
-        snd.master.gain.linearRampToValueAtTime(on ? 0.3 : 0, now + (on ? 2.5 : 0.6));
+        snd.master.gain.linearRampToValueAtTime(on ? 0.35 : 0, now + (on ? 2.5 : 0.6));
         if (!on) setTimeout(function () { if (!snd.on) ac.suspend(); }, 800);
       }
       paintSound();
