@@ -20,7 +20,7 @@
 <meta property="og:image:alt" content="A glowing black hole on a dark starfield, beside the line: Designing and running cloud infrastructure for smart metering.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://sushantnagil.com/og.jpg">
-<style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
+<noscript><style>.loader, .sound-btn { display: none !important; }</style></noscript>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -45,6 +45,8 @@
   }
 
   * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  img { max-width: 100%; }
   html { scroll-behavior: smooth; }
   html.lenis, html.lenis body { height: auto; }
   html.lenis { scroll-behavior: auto; }
@@ -113,9 +115,11 @@
     box-shadow: 0 0 44px -14px rgba(124, 196, 255, 0.6);
     cursor: pointer; transition: border-color 0.4s, background 0.4s, box-shadow 0.4s;
   }
-  .gate-enter:hover, .gate-enter:focus-visible { border-color: var(--accent); background: rgba(124, 196, 255, 0.1); box-shadow: 0 0 64px -10px rgba(124, 196, 255, 0.85); }
+  .gate-enter:focus-visible { border-color: var(--accent); background: rgba(124, 196, 255, 0.1); box-shadow: 0 0 64px -10px rgba(124, 196, 255, 0.85); }
+  @media (hover: hover) { .gate-enter:hover { border-color: var(--accent); background: rgba(124, 196, 255, 0.1); box-shadow: 0 0 64px -10px rgba(124, 196, 255, 0.85); } }
   .gate-quiet { padding: 6px 10px; border: 0; background: none; color: var(--muted); font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.14em; text-decoration: underline; text-underline-offset: 4px; cursor: pointer; transition: color 0.3s; }
-  .gate-quiet:hover, .gate-quiet:focus-visible { color: var(--text-2); }
+  .gate-quiet:focus-visible { color: var(--text-2); }
+  @media (hover: hover) { .gate-quiet:hover { color: var(--text-2); } }
   .lb { display: none; }
   .loader.form { background: transparent; }
   .loader.form.done { opacity: 1; visibility: visible; }
@@ -146,7 +150,9 @@
     cursor: pointer;
     transition: color 0.3s, border-color 0.3s, opacity 1.4s ease;
   }
-  .sound-btn:hover { color: var(--text); border-color: rgba(124, 196, 255, 0.45); }
+  @media (hover: hover) {
+    .sound-btn:hover { color: var(--text); border-color: rgba(124, 196, 255, 0.45); }
+  }
   .sound-btn.on { color: var(--accent); border-color: rgba(124, 196, 255, 0.45); }
   .eq { display: inline-flex; align-items: flex-end; gap: 2px; height: 12px; }
   .eq i { display: block; width: 2px; height: 3px; border-radius: 1px; background: currentColor; }
@@ -217,8 +223,10 @@
     transform: scaleX(0); transform-origin: left;
     transition: transform 0.3s;
   }
-  .nav-links a:hover { color: var(--text); }
-  .nav-links a:hover::after { transform: scaleX(1); }
+  @media (hover: hover) {
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+  }
   .nav-cta {
     padding: 10px 20px;
     border-radius: 999px;
@@ -227,9 +235,12 @@
     text-decoration: none;
     transition: background 0.3s, border-color 0.3s, transform 0.25s var(--ease);
   }
-  .nav-cta:hover { background: rgba(124, 196, 255, 0.1); border-color: var(--accent); }
+  @media (hover: hover) {
+    .nav-cta:hover { background: rgba(124, 196, 255, 0.1); border-color: var(--accent); }
+  }
   .nav-resume { display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 0.8rem; letter-spacing: 0.04em; color: var(--text-2); text-decoration: none; white-space: nowrap; transition: color 0.3s; }
-  .nav-resume:hover, .nav-resume:focus-visible { color: var(--accent); }
+  .nav-resume:focus-visible { color: var(--accent); }
+  @media (hover: hover) { .nav-resume:hover { color: var(--accent); } }
   .nav-resume svg { width: 14px; height: 14px; }
   .mobile-menu a.menu-resume { margin-top: 10px; font-family: var(--mono); font-size: 0.95rem; font-weight: 500; letter-spacing: 0.08em; color: var(--accent); }
   a.c-copy { display: inline-block; text-decoration: none; }
@@ -270,14 +281,18 @@
     box-shadow: 0 12px 32px -12px rgba(124, 196, 255, 0.65);
     transition: box-shadow 0.3s, transform 0.25s var(--ease);
   }
-  .btn-primary:hover { box-shadow: 0 18px 44px -14px rgba(124, 196, 255, 0.85); }
+  @media (hover: hover) {
+    .btn-primary:hover { box-shadow: 0 18px 44px -14px rgba(124, 196, 255, 0.85); }
+  }
   .btn-secondary {
     color: var(--text);
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.14);
     transition: background 0.3s, border-color 0.3s, transform 0.25s var(--ease);
   }
-  .btn-secondary:hover { background: rgba(255, 255, 255, 0.07); border-color: rgba(255, 255, 255, 0.28); }
+  @media (hover: hover) {
+    .btn-secondary:hover { background: rgba(255, 255, 255, 0.07); border-color: rgba(255, 255, 255, 0.28); }
+  }
   .btn-primary svg, .btn-secondary svg { width: 16px; height: 16px; }
 
   /* ---------- hero ---------- */
@@ -454,8 +469,10 @@
     transform: scaleX(0); transform-origin: left;
     transition: transform 0.5s var(--ease);
   }
-  .xp-card:hover { background: var(--bg-3); }
-  .xp-card:hover::before { transform: scaleX(1); }
+  @media (hover: hover) {
+    .xp-card:hover { background: var(--bg-3); }
+    .xp-card:hover::before { transform: scaleX(1); }
+  }
   .xp-top { display: flex; justify-content: space-between; align-items: center; }
   .xp-icon {
     width: 46px; height: 46px;
@@ -505,9 +522,11 @@
     opacity: 0; transition: opacity 0.4s;
   }
   .proj-card > * { position: relative; z-index: 1; }
-  .proj-card:hover { border-color: rgba(124, 196, 255, 0.25); box-shadow: 0 24px 60px -30px rgba(124, 196, 255, 0.45); }
-  .proj-card:hover::before { transform: scaleX(1); }
-  .proj-card:hover::after { opacity: 1; }
+  @media (hover: hover) {
+    .proj-card:hover { border-color: rgba(124, 196, 255, 0.25); box-shadow: 0 24px 60px -30px rgba(124, 196, 255, 0.45); }
+    .proj-card:hover::before { transform: scaleX(1); }
+    .proj-card:hover::after { opacity: 1; }
+  }
   .proj-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
   .proj-num { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
   .proj-tags { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -533,19 +552,22 @@
     text-decoration: none;
     transition: border-color 0.3s, background 0.3s;
   }
-  .cert:hover, .cert:focus-visible { border-color: rgba(124, 196, 255, 0.28); background: rgba(124, 196, 255, 0.05); }
+  .cert:focus-visible { border-color: rgba(124, 196, 255, 0.28); background: rgba(124, 196, 255, 0.05); }
+  @media (hover: hover) { .cert:hover { border-color: rgba(124, 196, 255, 0.28); background: rgba(124, 196, 255, 0.05); } }
   .cert img { display: block; width: 40px; height: 40px; }
   .cert-name { display: block; font-weight: 600; font-size: 0.9rem; line-height: 1.3; color: var(--text); }
   .cert-meta { display: block; font-family: var(--mono); font-size: 0.72rem; color: var(--muted); }
   .cert-verify { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-2); white-space: nowrap; transition: color 0.3s; }
-  .cert:hover .cert-verify, .cert:focus-visible .cert-verify { color: var(--accent); }
+  .cert:focus-visible .cert-verify { color: var(--accent); }
+  @media (hover: hover) { .cert:hover .cert-verify { color: var(--accent); } }
   .proj-cell.wide { grid-column: 1 / -1; }
   .proj-grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .proj-grid.three .proj-cell, .proj-grid.three .proj-cell:last-child { grid-column: auto; }
   @media (max-width: 980px) { .proj-grid.three { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (max-width: 640px) { .proj-grid.three { grid-template-columns: minmax(0, 1fr); } }
   .proj-link { align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.06em; color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(124, 196, 255, 0.3); padding-bottom: 2px; transition: border-color 0.3s; }
-  .proj-link:hover, .proj-link:focus-visible { border-color: var(--accent); }
+  .proj-link:focus-visible { border-color: var(--accent); }
+  @media (hover: hover) { .proj-link:hover { border-color: var(--accent); } }
   .proj-cell.wide .certs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 40px; }
   @media (max-width: 760px) { .proj-cell.wide .certs { grid-template-columns: minmax(0, 1fr); } }
 
@@ -602,7 +624,9 @@
     border-bottom: 1px solid var(--border);
     transition: padding 0.5s var(--ease), background 0.35s;
   }
-  .now-item:hover { padding-inline: 16px; background: rgba(124, 196, 255, 0.03); }
+  @media (hover: hover) {
+    .now-item:hover { padding-inline: 16px; background: rgba(124, 196, 255, 0.03); }
+  }
   .now-icon {
     width: 46px; height: 46px;
     display: grid; place-items: center;
@@ -629,11 +653,14 @@
     background: rgba(11, 17, 34, 0.6);
     transition: border-color 0.3s;
   }
-  .c-row:hover { border-color: rgba(124, 196, 255, 0.3); }
+  @media (hover: hover) {
+    .c-row:hover { border-color: rgba(124, 196, 255, 0.3); }
+  }
   .c-label { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
   .c-val { font-weight: 600; overflow-wrap: anywhere; }
   a.c-val { text-decoration: none; transition: color 0.2s; }
-  a.c-val:hover, a.c-val:focus-visible { color: var(--accent); }
+  a.c-val:focus-visible { color: var(--accent); }
+  @media (hover: hover) { a.c-val:hover { color: var(--accent); } }
   .c-copy {
     padding: 6px 13px;
     border: 1px solid rgba(255, 255, 255, 0.14);
@@ -644,7 +671,9 @@
     cursor: pointer;
     transition: background 0.2s, border-color 0.2s, color 0.2s;
   }
-  .c-copy:hover { background: rgba(255, 255, 255, 0.07); }
+  @media (hover: hover) {
+    .c-copy:hover { background: rgba(255, 255, 255, 0.07); }
+  }
   .c-copy.done { background: var(--accent); border-color: var(--accent); color: #05070f; }
   .avail-card {
     position: relative; overflow: hidden;
@@ -671,7 +700,9 @@
   .footer { position: relative; z-index: 1; border-top: 1px solid var(--border); padding-block: 28px; }
   .footer-inner { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-size: 0.85rem; color: var(--muted); }
   .footer a { text-decoration: none; color: var(--text-2); }
-  .footer a:hover { color: var(--text); }
+  @media (hover: hover) {
+    .footer a:hover { color: var(--text); }
+  }
 
   .magnetic { will-change: transform; }
   /* touch screens: no scroll-speed skew, and no permanent GPU layer for every card */
@@ -703,7 +734,7 @@
     .nav-links, .nav-cta, .nav-resume { display: none; }
     .nav-inner { gap: 10px; }
     .sound-btn.in-nav { position: static; width: 42px; height: 42px; padding: 0; justify-content: center; border-radius: 10px; border-color: var(--border); background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; }
-    .sound-btn.in-nav #soundLabel { display: none; }
+    .sound-btn.in-nav #soundLabel { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
     .hamburger { display: flex; }
   }
   @media (max-width: 760px) {
@@ -726,6 +757,19 @@
     .hero-actions { gap: 10px; }
     .hero-scroll-wrap { display: none; }
     .hero-actions .btn-primary, .hero-actions .btn-secondary { padding: 12px 18px; font-size: 0.88rem; }
+  }
+  @media print {
+    :root { color-scheme: light; --bg: #fff; --bg-2: #fff; --bg-3: #fff; --card: #fff; --text: #111; --text-2: #333; --muted: #555; --border: #ccc; --accent: #1d5f9e; }
+    body { background: #fff; }
+    * { text-shadow: none !important; }
+    .bh, #fx, canvas, .loader, .rift, .sound-btn, .cursor-dot, .cursor-ring, .nav, .mobile-menu, .hero-scroll-wrap, .divider, .orbit-g, .hero-grid-overlay, .hero::before, .xp-bg { display: none !important; }
+    [data-reveal], .hero-content, #heroLabel, #heroSub, #heroActions, .hero-title .line-inner, .arch .av { opacity: 1 !important; transform: none !important; }
+    .word { color: var(--text) !important; }
+    .accent { background: none; color: var(--accent); }
+    .hero { min-height: 0; padding-block: 24px; }
+    .section, .intro { padding-block: 28px; }
+    .section.alt, .stats-bar, .now-item { background: none; }
+    .proj-card, .xp-card, .c-row, .avail-card, .arch-box { box-shadow: none !important; break-inside: avoid; }
   }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
@@ -1301,6 +1345,8 @@
     var root = document.documentElement;
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     window.scrollTo(0, 0);
+    var soundPref = null;
+    try { soundPref = localStorage.getItem('sn-sound'); } catch (e) {}
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
     var G = window.gsap, ST = window.ScrollTrigger;
@@ -1456,6 +1502,12 @@
       c.fill();
     }
     function riftSize() {
+      var tall = window.matchMedia('(max-aspect-ratio: 4/5)').matches;
+      if (tall !== riftTall) {
+        riftTall = tall;
+        riftImg.src = tall ? '/media/portrait.jpg' : '/media/landscape.jpg';
+        RIFT_HOLE = tall ? [0.5, 0.23] : [0.66, 0.48];
+      }
       RPR = Math.min(window.devicePixelRatio || 1, 1.5);
       RW = window.innerWidth; RH = window.innerHeight;
       riftCv.width = Math.round(RW * RPR); riftCv.height = Math.round(RH * RPR);
@@ -1690,6 +1742,13 @@
         setTimeout(function () { loader.remove(); }, formMode ? 1300 : 700);
       }
       if (animate) initGSAP();
+      // a shared link to a section lands there once the site is open
+      var tgt = null;
+      try { tgt = location.hash && document.querySelector(location.hash); } catch (e) {}
+      if (tgt) {
+        if (lenis) setTimeout(function () { lenis.scrollTo(tgt, { offset: -70, duration: 1.6 }); }, gated ? 1400 : 900);
+        else tgt.scrollIntoView();
+      }
     }
     if (reduce) {
       loader.remove();
@@ -1704,24 +1763,27 @@
       }
       // an Enter screen, unless this visitor has turned sound off before: browsers only allow audio after a click,
       // so the click that opens the site is also the one that starts the sound
-      var soundPref = null;
-      try { soundPref = localStorage.getItem('sn-sound'); } catch (e) {}
       var gated = formMode && soundPref !== 'off' && !!document.getElementById('rift');
       function enterSite(withSound) {
         if (started || riftState.opening) return;
         setSound(withSound);
-        riftOpen(function () {
-          start();
-          // a shared link to a section lands there once the site is open
-          var tgt = null;
-          try { tgt = location.hash && document.querySelector(location.hash); } catch (e) {}
-          if (tgt && lenis) setTimeout(function () { lenis.scrollTo(tgt, { offset: -70, duration: 1.6 }); }, 1400);
-        });
+        // the same click lets a background video start where autoplay was refused (iPhone Low Power Mode)
+        if (bhOn && bhVideo.paused) bhPlay();
+        riftOpen(start);
       }
       if (gated) {
         riftShow();
+        // the loader's no-JavaScript failsafe isn't needed here, and would hide the letterbox bars before they slide away
+        loader.style.animation = 'none';
         document.getElementById('gateEnter').addEventListener('click', function () { enterSite(true); });
         document.getElementById('gateQuiet').addEventListener('click', function () { enterSite(false); });
+        // the Enter key works even after a click elsewhere took focus off the button
+        document.addEventListener('keydown', function (e) {
+          if (e.key !== 'Enter' || started || riftState.opening) return;
+          if (e.target && e.target.closest && e.target.closest('#riftUi button')) return;
+          e.preventDefault();
+          enterSite(true);
+        });
       }
       function showGate() {
         document.getElementById('riftUi').classList.add('show');
@@ -1729,16 +1791,14 @@
       }
       var fill = document.getElementById('loaderFill');
       var ltxt = document.getElementById('loaderText');
-      var stages = formMode
-        ? [[25, ''], [50, ''], [75, ''], [100, '']]
-        : [[25, ''], [50, ''], [75, ''], [100, '']];
+      var stages = [[25, ''], [50, ''], [75, ''], [100, '']];
       var k = 0;
       (function step() {
-        if (k >= stages.length) { if (gated) showGate(); else setTimeout(start, formMode ? 400 : 320); return; }
+        if (k >= stages.length) { if (gated) showGate(); else setTimeout(start, 300); return; }
         fill.style.width = stages[k][0] + '%';
         ltxt.textContent = stages[k][1];
         k++;
-        setTimeout(step, gated ? 450 : formMode ? 700 : 260 + Math.random() * 140);
+        setTimeout(step, gated ? 450 : 250);
       })();
       if (!gated) setTimeout(start, formMode ? 7000 : 4000);
     }
@@ -1754,11 +1814,18 @@
       burger.classList.toggle('active', open);
       menu.classList.toggle('active', open);
       burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
       root.classList.toggle('locked', open);
       if (lenis) { if (open) lenis.stop(); else lenis.start(); }
     }
     burger.addEventListener('click', function () { setMenu(!menu.classList.contains('active')); });
     menu.addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && menu.classList.contains('active')) { setMenu(false); burger.focus(); }
+    });
+    var menuMq = window.matchMedia('(max-width: 960px)');
+    function menuFits() { if (!menuMq.matches && menu.classList.contains('active')) setMenu(false); }
+    if (menuMq.addEventListener) menuMq.addEventListener('change', menuFits); else if (menuMq.addListener) menuMq.addListener(menuFits);
 
     // ---------- scrambled text ----------
     var GLYPHS = '!<>-_\\/[]{}=+*^?#01';
@@ -1786,7 +1853,7 @@
     });
 
     // ---------- copy ----------
-    document.querySelectorAll('.c-copy').forEach(function (btn) {
+    document.querySelectorAll('.c-copy[data-copy]').forEach(function (btn) {
       btn.addEventListener('click', function () {
         var el = document.getElementById(btn.getAttribute('data-copy'));
         if (!el) return;
@@ -1838,6 +1905,7 @@
 
       document.querySelectorAll('[data-tilt]').forEach(function (card) {
         card.addEventListener('mousemove', function (e) {
+          clearTimeout(card._settle);
           var r = card.getBoundingClientRect();
           var x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
           var amt = card.classList.contains('featured') ? 3 : 7;
@@ -1849,6 +1917,8 @@
         card.addEventListener('mouseleave', function () {
           card.style.transition = 'transform 0.7s var(--ease), border-color 0.4s, box-shadow 0.4s';
           card.style.transform = '';
+          clearTimeout(card._settle);
+          card._settle = setTimeout(function () { card.style.transition = ''; }, 750);
         });
       });
     }
@@ -2066,7 +2136,7 @@
       portrait: [[1, 0, 0, 1], [1.25, 0, 0.05, 0.6], [1.45, 0, 0.08, 0.45], [1.3, 0, 0.04, 0.45],
                  [1.2, 0, 0.06, 0.45], [1.4, 0, 0.08, 0.45], [1.2, 0, 0.04, 0.5], [1.35, 0, 0.08, 0.75]]
     };
-    var bhAnchors = [], bhCur = null, bhLast = '', bhMeasureT = 0;
+    var bhAnchors = [], bhCur = null, bhLast = '', bhLastOp = '', bhMeasureT = 0;
     function bhMeasure() {
       var sy = window.scrollY || 0;
       bhAnchors = BH_STOPS.map(function (el) { return el.getBoundingClientRect().top + sy; });
@@ -2098,7 +2168,8 @@
       var py = Math.min(o[1] * (z - 1), Math.max(-(1 - o[1]) * (z - 1), bhCur[2]));
       var css = 'translate3d(' + (px * window.innerWidth).toFixed(1) + 'px,' + (py * window.innerHeight).toFixed(1) + 'px,0) scale(' + z.toFixed(4) + ')';
       if (css !== bhLast) { bhCam.style.transform = css; bhLast = css; }
-      bhCam.style.opacity = bhCur[3].toFixed(3);
+      var op = bhCur[3].toFixed(3);
+      if (op !== bhLastOp) { bhCam.style.opacity = op; bhLastOp = op; }
     }
 
     // ---------- shooting stars and warp streaks on fast scroll ----------
@@ -2209,9 +2280,10 @@
       }
     }
 
-    // ---------- space soundtrack: generated live, off until the visitor turns it on ----------
-    var snd = { ctx: null, on: false, want: true };
-    try { if (localStorage.getItem('sn-sound') === 'off') snd.want = false; } catch (e) {}
+    // ---------- space soundtrack: generated live ----------
+    // on by default for visitors who come through the Enter screen; anyone else (reduced motion, sound turned off before)
+    // only hears it if they turned it on themselves
+    var snd = { ctx: null, on: false, want: gated ? true : soundPref === 'on' };
     var soundBtn = document.getElementById('soundBtn');
     var soundLabel = document.getElementById('soundLabel');
     function buildAudio() {
@@ -2219,6 +2291,7 @@
       if (!AC) return false;
       var ac = new AC();
       snd.ctx = ac;
+      ac.onstatechange = paintSound;   // e.g. an iPhone pausing audio for a call
       var master = ac.createGain();
       master.gain.value = 0;
       master.connect(ac.destination);
@@ -2342,13 +2415,22 @@
       snd.driftTimer = setTimeout(drift, 7000 + Math.random() * 9000);
     }
     function paintSound() {
-      var playing = snd.want && snd.on;
-      // on by default; the bars only move once the browser has actually let the audio start
+      // the label shows the choice; the bars only move while the browser is actually playing it
+      var playing = snd.want && snd.on && !!snd.ctx && snd.ctx.state === 'running';
       soundBtn.classList.toggle('on', snd.want);
       soundBtn.classList.toggle('playing', playing);
       soundBtn.setAttribute('aria-pressed', snd.want ? 'true' : 'false');
       soundLabel.textContent = snd.want ? 'sound on' : 'sound off';
-      soundBtn.setAttribute('aria-label', playing ? 'Turn sound off' : 'Turn sound on');
+    }
+    // one place that changes the volume; the audio is suspended only once a fade to silence has finished
+    function fadeTo(v, secs) {
+      var ac = snd.ctx, g = snd.master.gain, now = ac.currentTime;
+      clearTimeout(snd.sleepTimer);
+      g.cancelScheduledValues(now);
+      g.setValueAtTime(g.value, now);
+      g.linearRampToValueAtTime(v, now + secs);
+      if (v > 0) { if (ac.state !== 'running') ac.resume(); }
+      else snd.sleepTimer = setTimeout(function () { ac.suspend(); }, secs * 1000 + 200);
     }
     function setSound(on) {
       snd.want = on;
@@ -2356,31 +2438,43 @@
       if (on && !snd.ctx && !buildAudio()) { snd.want = false; paintSound(); return; }
       if (snd.ctx) {
         snd.on = on;
-        var ac = snd.ctx, now = ac.currentTime;
-        if (on && ac.state === 'suspended') ac.resume();
-        snd.master.gain.cancelScheduledValues(now);
-        snd.master.gain.setValueAtTime(snd.master.gain.value, now);
-        snd.master.gain.linearRampToValueAtTime(on ? 0.45 : 0, now + (on ? 2.5 : 0.6));
-        if (!on) setTimeout(function () { if (!snd.on) ac.suspend(); }, 800);
+        fadeTo(on && !document.hidden ? 0.45 : 0, on ? 2.5 : 0.6);
       }
       paintSound();
     }
-    soundBtn.addEventListener('click', function () { setSound(!(snd.want && snd.on)); });
+    soundBtn.addEventListener('click', function () {
+      // "sound on" but the browser paused it (a phone call, an app switch): this click brings it back
+      if (snd.want && snd.on && snd.ctx.state !== 'running') { fadeTo(0.45, 1.5); return; }
+      setSound(!(snd.want && snd.on));
+    });
     paintSound();
-    // sound is on by default, but browsers only allow audio after a gesture,
-    // so it starts on the first tap, click or key press anywhere except the toggle itself
+    // browsers only allow audio after a gesture, so where there's no Enter screen to click, a visitor who turned
+    // sound on before hears it from their first tap, click or key press
     var gestureEvents = ['pointerdown', 'pointerup', 'mousedown', 'touchend', 'click', 'keydown'];
+    function hookGesture() {
+      gestureEvents.forEach(function (n) { window.addEventListener(n, onGesture, true); });
+    }
     function unhookGesture() {
       gestureEvents.forEach(function (n) { window.removeEventListener(n, onGesture, true); });
     }
     function onGesture(e) {
-      if (e.target && e.target.closest && e.target.closest('#soundBtn, #gate')) return;
+      if (e.target && e.target.closest && e.target.closest('#soundBtn, #rift')) return;
       if (!snd.want) { unhookGesture(); return; }
       if (!snd.on) setSound(true);
       else if (snd.ctx && snd.ctx.state !== 'running') snd.ctx.resume();
       if (snd.ctx && snd.ctx.state === 'running') unhookGesture();
     }
-    if (snd.want) gestureEvents.forEach(function (n) { window.addEventListener(n, onGesture, true); });
+    if (!gated && snd.want) hookGesture();
+    // quiet while the tab is in the background, back when it returns
+    function soundVisibility() {
+      if (!snd.ctx || !snd.on) return;
+      if (document.hidden) { fadeTo(0, 0.4); return; }
+      fadeTo(0.45, 1.5);
+      // some phones only resume audio after a tap
+      setTimeout(function () { if (snd.on && !document.hidden && snd.ctx.state !== 'running') hookGesture(); }, 400);
+    }
+    document.addEventListener('visibilitychange', soundVisibility);
+    window.addEventListener('pageshow', function (e) { if (e.persisted) soundVisibility(); });
     var soundHome = soundBtn.parentNode, soundNext = soundBtn.nextSibling;
     var navMq = window.matchMedia('(max-width: 960px)');
     function placeSound() {

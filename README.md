@@ -53,6 +53,8 @@ The ambient sound is generated in the browser with Web Audio:
 - two long brown-noise layers, 29 s and 37 s, panned left and right, which only line up again after about 18 minutes
 - slow random drift in tone and level, so it never settles into a loop
 
+It fades out while the tab is in the background and comes back when the visitor returns. Visitors who never see the Enter screen only hear it if they turn it on with the sound button.
+
 ## Checks
 
 - `build`, on every push: builds the site and fails on JavaScript syntax errors or unpinned CDN scripts.
