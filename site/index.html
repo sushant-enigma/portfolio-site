@@ -116,6 +116,23 @@
   .loader-fill { width: 0; height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-3)); transition: width 0.35s ease; }
   .loader-text { font-family: var(--mono); font-size: 0.78rem; color: var(--text-2); letter-spacing: 0.04em; }
   .loader.done { pointer-events: none; }
+  /* enter screen: waits for one click, which also lets the browser start the sound */
+  .loader.gated { animation: none; }
+  .gate { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; opacity: 0; pointer-events: none; transition: opacity 1.4s var(--ease); }
+  .gate.show { opacity: 1; pointer-events: auto; }
+  /* wide screens: the black hole sits right of centre, so the button goes just beneath it */
+  @media (min-aspect-ratio: 4/5) { .gate { inset: auto; left: 67%; top: 75%; transform: translate(-50%, -50%); } }
+  .loader.done .gate { opacity: 0; pointer-events: none; transition-duration: 0.5s; }
+  .gate-enter {
+    padding: 16px 46px; border-radius: 999px;
+    border: 1px solid rgba(124, 196, 255, 0.45); background: rgba(5, 7, 15, 0.55);
+    color: var(--text); font-family: var(--mono); font-size: 0.82rem; letter-spacing: 0.34em; text-indent: 0.34em; text-transform: uppercase;
+    box-shadow: 0 0 44px -14px rgba(124, 196, 255, 0.6);
+    cursor: pointer; transition: border-color 0.4s, background 0.4s, box-shadow 0.4s;
+  }
+  .gate-enter:hover, .gate-enter:focus-visible { border-color: var(--accent); background: rgba(124, 196, 255, 0.1); box-shadow: 0 0 64px -10px rgba(124, 196, 255, 0.85); }
+  .gate-quiet { padding: 6px 10px; border: 0; background: none; color: var(--muted); font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.14em; text-decoration: underline; text-underline-offset: 4px; cursor: pointer; transition: color 0.3s; }
+  .gate-quiet:hover, .gate-quiet:focus-visible { color: var(--text-2); }
   .lb { display: none; }
   .loader.form { background: transparent; }
   .loader.form.done { opacity: 1; visibility: visible; }
@@ -778,6 +795,10 @@
   <div class="loader-logo">S<span>N</span></div>
   <div class="loader-bar"><div class="loader-fill" id="loaderFill"></div></div>
   <div class="loader-text" id="loaderText"></div>
+  <div class="gate" id="gate" hidden>
+    <button class="gate-enter" id="gateEnter" type="button">Enter</button>
+    <button class="gate-quiet" id="gateQuiet" type="button">enter without sound</button>
+  </div>
 </div>
 
 <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
@@ -1481,6 +1502,28 @@
         loader.classList.add('form');
         root.classList.add('forming');
       }
+      // an Enter screen, unless this visitor has turned sound off before: browsers only allow audio after a click,
+      // so the click that opens the site is also the one that starts the sound
+      var soundPref = null;
+      try { soundPref = localStorage.getItem('sn-sound'); } catch (e) {}
+      var gated = formMode && soundPref !== 'off';
+      var gate = document.getElementById('gate');
+      function enterSite(withSound) {
+        if (started) return;
+        setSound(withSound);
+        start();
+      }
+      if (gated) {
+        loader.classList.add('gated');
+        loader.removeAttribute('aria-hidden');
+        document.getElementById('gateEnter').addEventListener('click', function () { enterSite(true); });
+        document.getElementById('gateQuiet').addEventListener('click', function () { enterSite(false); });
+      }
+      function showGate() {
+        gate.hidden = false;
+        requestAnimationFrame(function () { gate.classList.add('show'); });
+        try { document.getElementById('gateEnter').focus({ preventScroll: true }); } catch (e) {}
+      }
       var fill = document.getElementById('loaderFill');
       var ltxt = document.getElementById('loaderText');
       var stages = formMode
@@ -1488,13 +1531,13 @@
         : [[25, ''], [50, ''], [75, ''], [100, '']];
       var k = 0;
       (function step() {
-        if (k >= stages.length) { setTimeout(start, formMode ? 400 : 320); return; }
+        if (k >= stages.length) { if (gated) showGate(); else setTimeout(start, formMode ? 400 : 320); return; }
         fill.style.width = stages[k][0] + '%';
         ltxt.textContent = stages[k][1];
         k++;
-        setTimeout(step, formMode ? 700 : 260 + Math.random() * 140);
+        setTimeout(step, gated ? 450 : formMode ? 700 : 260 + Math.random() * 140);
       })();
-      setTimeout(start, formMode ? 7000 : 4000);
+      if (!gated) setTimeout(start, formMode ? 7000 : 4000);
     }
 
     // ---------- nav ----------
@@ -2128,7 +2171,7 @@
       gestureEvents.forEach(function (n) { window.removeEventListener(n, onGesture, true); });
     }
     function onGesture(e) {
-      if (e.target && e.target.closest && e.target.closest('#soundBtn')) return;
+      if (e.target && e.target.closest && e.target.closest('#soundBtn, #gate')) return;
       if (!snd.want) { unhookGesture(); return; }
       if (!snd.on) setSound(true);
       else if (snd.ctx && snd.ctx.state !== 'running') snd.ctx.resume();
