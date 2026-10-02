@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Sushant Nagil</title>
-<meta name="description" content="Sushant Nagil, infrastructure engineer and team lead. Kubernetes, Kafka and MQTT platforms on AWS and OCI for smart-metering systems, and write-ups of real production incidents.">
+<meta name="description" content="Sushant Nagil leads the infrastructure team at Polaris Smart Metering, running the AWS and OCI systems behind 2 million smart meters for state utilities in India.">
 <link rel="canonical" href="https://sushantnagil.com/">
 <meta name="theme-color" content="#030409">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -12,12 +12,12 @@
 <link rel="preload" as="image" href="/media/portrait.jpg" media="(max-aspect-ratio: 4/5)">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://sushantnagil.com/">
-<meta property="og:title" content="Sushant Nagil · Infrastructure Engineer">
-<meta property="og:description" content="Sushant Nagil, infrastructure engineer and team lead. Kubernetes, Kafka and MQTT platforms on AWS and OCI for smart-metering systems, and write-ups of real production incidents.">
+<meta property="og:title" content="Sushant Nagil · Cloud &amp; DevOps lead">
+<meta property="og:description" content="I lead the infrastructure team at Polaris Smart Metering. We run the AWS and OCI systems behind 2 million smart meters for state utilities in India.">
 <meta property="og:image" content="https://sushantnagil.com/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="A glowing black hole on a dark starfield, beside the line: I build and run cloud infrastructure for IoT platforms.">
+<meta property="og:image:alt" content="A glowing black hole on a dark starfield, beside the line: I run the cloud behind 2 million smart meters.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://sushantnagil.com/og.jpg">
 <style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style>
@@ -369,6 +369,7 @@
   }
   @keyframes blink { 50% { opacity: 0; } }
   .t-output { display: block; margin-top: 6px; color: var(--text-2); }
+  .hero-sub { max-width: 36em; margin-bottom: 2.2rem; font-size: 1.08rem; line-height: 1.65; color: var(--text-2); text-shadow: 0 1px 14px rgba(0, 0, 0, 0.8); }
   .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; }
   .hero-visual { position: relative; }
   .arch { display: block; width: 100%; max-width: 460px; height: auto; margin-inline: auto; overflow: visible; }
@@ -567,6 +568,17 @@
   .cert-verify { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-2); white-space: nowrap; transition: color 0.3s; }
   .cert:hover .cert-verify, .cert:focus-visible .cert-verify { color: var(--accent); }
   .proj-cell.wide { grid-column: 1 / -1; }
+  .proj-grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .proj-grid.two .proj-cell, .proj-grid.two .proj-cell:last-child { grid-column: auto; }
+  .skills { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 48px; margin: 0; border-top: 1px solid var(--border); }
+  .skills > div { display: grid; grid-template-columns: 8.5rem minmax(0, 1fr); gap: 16px; padding: 18px 4px; border-bottom: 1px solid var(--border); background: linear-gradient(90deg, rgba(3, 4, 9, 0.55), rgba(3, 4, 9, 0.3)); }
+  .skills dt { padding-top: 3px; font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+  .skills dd { margin: 0; font-size: 0.98rem; color: var(--text); }
+  @media (max-width: 760px) {
+    .skills { grid-template-columns: minmax(0, 1fr); }
+    .skills > div { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  }
+  @media (max-width: 640px) { .proj-grid.two { grid-template-columns: minmax(0, 1fr); } }
   .proj-cell.wide .certs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 40px; }
   @media (max-width: 760px) { .proj-cell.wide .certs { grid-template-columns: minmax(0, 1fr); } }
 
@@ -767,7 +779,7 @@
   <div class="lb lb-bot"></div>
   <div class="loader-logo">S<span>N</span></div>
   <div class="loader-bar"><div class="loader-fill" id="loaderFill"></div></div>
-  <div class="loader-text" id="loaderText">Starting up...</div>
+  <div class="loader-text" id="loaderText"></div>
 </div>
 
 <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
@@ -781,7 +793,7 @@
     <a class="logo" href="#top">sushant<span>.</span>nagil</a>
     <div class="nav-links">
       <a href="#about">About</a>
-      <a href="#expertise">Expertise</a>
+      <a href="#expertise">Skills</a>
       <a href="#projects">Projects</a>
       <a href="#incidents">Incidents</a>
       <a href="#experience">Experience</a>
@@ -794,7 +806,7 @@
 </nav>
 <div class="mobile-menu" id="mobileMenu">
   <a href="#about"><span>01</span>About</a>
-  <a href="#expertise"><span>02</span>Expertise</a>
+  <a href="#expertise"><span>02</span>Skills</a>
   <a href="#projects"><span>03</span>Projects</a>
   <a href="#incidents"><span>04</span>Incidents</a>
   <a href="#experience"><span>05</span>Experience</a>
@@ -809,27 +821,18 @@
     <div class="hero-grid-overlay" aria-hidden="true"></div>
     <div class="container hero-inner">
       <div class="hero-content">
-        <div class="hero-label" id="heroLabel"><span class="pulse"></span>Infrastructure Engineer · IoT platforms</div>
+        <div class="hero-label" id="heroLabel"><span class="pulse"></span>Cloud &amp; DevOps lead · smart metering</div>
         <h1 class="hero-title">
-          <span class="line"><span class="line-inner">I build and run</span></span>
-          <span class="line"><span class="line-inner accent">cloud infrastructure</span></span>
-          <span class="line"><span class="line-inner">for IoT platforms.</span></span>
+          <span class="line"><span class="line-inner">I run the cloud</span></span>
+          <span class="line"><span class="line-inner accent">behind 2 million</span></span>
+          <span class="line"><span class="line-inner">smart meters.</span></span>
         </h1>
-        <div class="hero-terminal" id="heroTerminal">
-          <div class="terminal-header">
-            <span class="t-dot red"></span><span class="t-dot yellow"></span><span class="t-dot green"></span>
-            <span class="t-title">sushant@infra ~ portfolio</span>
-          </div>
-          <div class="terminal-body">
-            <span><span class="t-prompt">$</span><span id="typingText">cat focus.txt</span><span class="t-cursor"></span></span>
-            <span class="t-output" id="termOut">→ kubernetes | kafka | mqtt | aws | oci</span>
-          </div>
-        </div>
+        <p class="hero-sub" id="heroSub">I lead the infrastructure team at Polaris Smart Metering. We run the systems that read electricity meters for state utilities in Ladakh, Uttar Pradesh, Tamil Nadu, West Bengal, Manipur and a few more.</p>
         <div class="hero-actions" id="heroActions">
-          <a class="btn-primary magnetic" href="#projects">View projects
+          <a class="btn-primary magnetic" href="#projects">See my work
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
           </a>
-          <a class="btn-secondary magnetic" href="#contact">Get in touch
+          <a class="btn-secondary magnetic" href="#contact">Email me
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
         </div>
@@ -853,7 +856,7 @@
     <div class="container about-grid">
       <div>
         <div class="section-label">About</div>
-        <p class="intro-text" id="introText">I'm an infrastructure engineer working on smart-metering and IoT platforms for utilities. I run Kubernetes across several AWS accounts, look after the Kafka and MQTT brokers that carry device traffic, and plan migrations between AWS and OCI. I like systems that are easy to operate: alerts that mean something, deploys that only touch what changed, and upgrades with a written plan.</p>
+        <p class="intro-text" id="introText">Each state project has its own AWS accounts, and some run partly on OCI. My team of five keeps all of it running: the Kubernetes clusters, the MQTT brokers the meters connect to, Kafka, and the databases behind them. I'm not tied to one stack. I use whatever AWS, OCI or open source has that fits the job. Most of my time goes on keeping the AWS bill down and making sure the platform keeps up as more meters come online.</p>
       </div>
       <div class="about-visual" id="aboutVisual">
         <svg class="arch" viewBox="0 0 460 480" role="img" aria-label="How device data moves: smart meters to EMQX brokers, Kafka on Strimzi, services on EKS across AWS and OCI, and Grafana alerts">
@@ -934,47 +937,10 @@
             <text class="tag" x="306" y="423" text-anchor="end">alerts</text>
           </g>
         </svg>
-        <p class="arch-caption">how device data moves through the platform</p>
+        <p class="arch-caption">how a meter reading moves through the platform</p>
       </div>
     </div>
   </section>
-
-  <div class="stats-bar">
-    <div class="container stats-grid">
-      <div class="stat-item" data-reveal>
-        <div class="stat-number" data-count="90" data-prefix="~" data-suffix="%">~90%</div>
-        <div class="stat-label">less CI build time, 30 min down to 3</div>
-      </div>
-      <div class="stat-item" data-reveal>
-        <div class="stat-number" data-count="5">5</div>
-        <div class="stat-label">AWS accounts moved to EKS 1.35</div>
-      </div>
-      <div class="stat-item" data-reveal>
-        <div class="stat-number" data-count="2">2</div>
-        <div class="stat-label">clouds in production, AWS and OCI</div>
-      </div>
-      <div class="stat-item" data-reveal>
-        <div class="stat-number" data-count="4.7" data-decimals="1" data-prefix="$" data-suffix="K">$4.7K</div>
-        <div class="stat-label">yearly monitoring cost traced to one alert rule</div>
-      </div>
-      <div class="stat-item" data-reveal>
-        <div class="stat-number" data-count="1.5" data-decimals="1" data-suffix="M">1.5M</div>
-        <div class="stat-label">smart meters whose data runs through the platform</div>
-      </div>
-      <div class="stat-item" data-reveal>
-        <div class="stat-number" data-count="24">24</div>
-        <div class="stat-label">AWS accounts in the estate I help run</div>
-      </div>
-      <div class="stat-item" data-reveal>
-        <div class="stat-number" data-count="45" data-prefix="$" data-suffix="K">$45K</div>
-        <div class="stat-label">recurring yearly savings from cost work</div>
-      </div>
-      <div class="stat-item" data-reveal>
-        <div class="stat-number" data-count="5">5</div>
-        <div class="stat-label">engineers on the infrastructure team I lead</div>
-      </div>
-    </div>
-  </div>
 
   <div class="divider" aria-hidden="true">
     <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
@@ -987,297 +953,76 @@
   <section class="section" id="expertise">
     <div class="container">
       <div class="section-head" data-reveal>
-        <div class="section-label">What I do</div>
-        <h2 class="section-title">Technical expertise</h2>
-        <p class="section-desc">Twelve areas I work in every week, across AWS and OCI.</p>
+        <div class="section-label">Skills</div>
+        <h2 class="section-title">What I work with</h2>
       </div>
-      <div class="xp-grid">
-        <div class="xp-cell" data-reveal>
-          <article class="xp-card">
-            <div class="xp-top">
-              <div class="xp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.8 19.9 6.6 21.8 15.1 16.4 21.9H7.6L2.2 15.1 4.1 6.6Z"/><circle cx="12" cy="12.4" r="2.6"/><path d="M12 5.8v4M12 15v3.4M6.2 9.9l3.5 1.5M14.3 13.4l3.6 1.5M6.2 15.2l3.6-1.6M14.3 11.4l3.5-1.5"/></svg></div>
-              <span class="xp-num">01</span>
-            </div>
-            <h3>Kubernetes</h3>
-            <p>Run EKS across five AWS accounts: version upgrades, node groups, custom AMIs and launch templates.</p>
-            <div class="chips"><span>EKS</span><span>node groups</span><span>launch templates</span><span>AMIs</span><span>IAM</span></div>
-            <div class="xp-bg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M12 2.8 19.9 6.6 21.8 15.1 16.4 21.9H7.6L2.2 15.1 4.1 6.6Z"/><circle cx="12" cy="12.4" r="2.6"/></svg></div>
-          </article>
-        </div>
-        <div class="xp-cell" data-reveal>
-          <article class="xp-card">
-            <div class="xp-top">
-              <div class="xp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.5c2.2-2 4.3 2 6.5 0s4.3 2 6.5 0 3.3-1 5 0"/><path d="M3 12c2.2-2 4.3 2 6.5 0s4.3 2 6.5 0 3.3-1 5 0"/><path d="M3 16.5c2.2-2 4.3 2 6.5 0s4.3 2 6.5 0 3.3-1 5 0"/></svg></div>
-              <span class="xp-num">02</span>
-            </div>
-            <h3>Messaging</h3>
-            <p>Operate the MQTT and Kafka brokers that carry device traffic, and move managed Kafka onto Strimzi.</p>
-            <div class="chips"><span>Kafka</span><span>Strimzi</span><span>MSK</span><span>EMQX</span><span>MQTT</span></div>
-            <div class="xp-bg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M3 7.5c2.2-2 4.3 2 6.5 0s4.3 2 6.5 0 3.3-1 5 0"/><path d="M3 12c2.2-2 4.3 2 6.5 0s4.3 2 6.5 0 3.3-1 5 0"/><path d="M3 16.5c2.2-2 4.3 2 6.5 0s4.3 2 6.5 0 3.3-1 5 0"/></svg></div>
-          </article>
-        </div>
-        <div class="xp-cell" data-reveal>
-          <article class="xp-card">
-            <div class="xp-top">
-              <div class="xp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="6" r="2.2"/><circle cx="19" cy="6" r="2.2"/><circle cx="12" cy="18" r="2.2"/><path d="M7.2 6h9.6M6.2 7.9l4.7 8.2M17.8 7.9l-4.7 8.2"/></svg></div>
-              <span class="xp-num">03</span>
-            </div>
-            <h3>Cloud networking</h3>
-            <p>Design AWS VPCs and OCI VCNs, load balancers, route tables and hub-and-spoke ingress.</p>
-            <div class="chips"><span>VPC</span><span>OCI VCN</span><span>NLB</span><span>route tables</span><span>DRG</span></div>
-            <div class="xp-bg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><circle cx="5" cy="6" r="2.2"/><circle cx="19" cy="6" r="2.2"/><circle cx="12" cy="18" r="2.2"/><path d="M7.2 6h9.6M6.2 7.9l4.7 8.2M17.8 7.9l-4.7 8.2"/></svg></div>
-          </article>
-        </div>
-        <div class="xp-cell" data-reveal>
-          <article class="xp-card">
-            <div class="xp-top">
-              <div class="xp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h3.5l2.2-5.5 4.6 11 2.3-5.5H21"/></svg></div>
-              <span class="xp-num">04</span>
-            </div>
-            <h3>Observability</h3>
-            <p>Tune Grafana, CloudWatch and Alertmanager so the right alerts reach people and monitoring cost stays in check.</p>
-            <div class="chips"><span>Grafana</span><span>CloudWatch</span><span>Alertmanager</span><span>VPC Flow Logs</span></div>
-            <div class="xp-bg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M3 12h3.5l2.2-5.5 4.6 11 2.3-5.5H21"/></svg></div>
-          </article>
-        </div>
-        <div class="xp-cell" data-reveal>
-          <article class="xp-card">
-            <div class="xp-top">
-              <div class="xp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14.3-4.9L4 8"/><path d="M4 3.5V8h4.5"/><path d="M4 13a8 8 0 0 0 14.3 4.9L20 16"/><path d="M20 20.5V16h-4.5"/></svg></div>
-              <span class="xp-num">05</span>
-            </div>
-            <h3>CI/CD</h3>
-            <p>Build pipelines that only rebuild what changed, and deploy across accounts with shared IAM roles.</p>
-            <div class="chips"><span>change detection</span><span>cross-account</span><span>IAM roles</span></div>
-            <div class="xp-bg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14.3-4.9L4 8"/><path d="M4 13a8 8 0 0 0 14.3 4.9L20 16"/></svg></div>
-          </article>
-        </div>
-        <div class="xp-cell" data-reveal>
-          <article class="xp-card">
-            <div class="xp-top">
-              <div class="xp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5.5" rx="7.5" ry="2.8"/><path d="M4.5 5.5v13c0 1.5 3.4 2.8 7.5 2.8s7.5-1.3 7.5-2.8v-13"/><path d="M4.5 12c0 1.5 3.4 2.8 7.5 2.8s7.5-1.3 7.5-2.8"/></svg></div>
-              <span class="xp-num">06</span>
-            </div>
-            <h3>Databases</h3>
-            <p>Move large MySQL datasets between RDS and EC2 with pipelines that resume after a failure.</p>
-            <div class="chips"><span>MySQL</span><span>RDS</span><span>EC2</span><span>mydumper</span><span>SSM</span></div>
-            <div class="xp-bg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><ellipse cx="12" cy="5.5" rx="7.5" ry="2.8"/><path d="M4.5 5.5v13c0 1.5 3.4 2.8 7.5 2.8s7.5-1.3 7.5-2.8v-13"/></svg></div>
-          </article>
-        </div>
-        <div class="xp-cell" data-reveal>
-          <article class="xp-card">
-            <div class="xp-top">
-              <div class="xp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 20.5h17"/><path d="M6.5 17v-3.5M11 17V9.5M15.5 17V6"/><path d="m17.5 6.5 2-2.5 2 2.5"/></svg></div>
-              <span class="xp-num">07</span>
-            </div>
-            <h3>Autoscaling</h3>
-            <p>Layer Karpenter, KEDA, HPA and VPA so bursty Kafka consumers scale on lag, request services scale on load, and nodes follow the pods.</p>
-            <div class="chips"><span>Karpenter</span><span>KEDA</span><span>HPA</span><span>VPA</span><span>Goldilocks</span></div>
-            <div class="xp-bg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M3.5 20.5h17"/><path d="M6.5 17v-3.5M11 17V9.5M15.5 17V6"/></svg></div>
-          </article>
-        </div>
-        <div class="xp-cell" data-reveal>
-          <article class="xp-card">
-            <div class="xp-top">
-              <div class="xp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 7-5 5 5 5M16 7l5 5-5 5M13.5 4.5l-3 15"/></svg></div>
-              <span class="xp-num">08</span>
-            </div>
-            <h3>Infrastructure as code</h3>
-            <p>Terraform modules with remote state, CloudFormation for the MQTT clusters, and Helm with Argo CD for application rollout.</p>
-            <div class="chips"><span>Terraform</span><span>CloudFormation</span><span>Helm</span><span>Argo CD</span><span>GitOps</span></div>
-            <div class="xp-bg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="m8 7-5 5 5 5M16 7l5 5-5 5M13.5 4.5l-3 15"/></svg></div>
-          </article>
-        </div>
-        <div class="xp-cell" data-reveal>
-          <article class="xp-card">
-            <div class="xp-top">
-              <div class="xp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.8"/><path d="M14.8 9.3c-.6-.8-1.6-1.3-2.8-1.3-1.6 0-2.8.9-2.8 2s1.1 1.7 2.8 2 2.8.9 2.8 2-1.2 2-2.8 2c-1.3 0-2.4-.5-3-1.4M12 6.4V8M12 16v1.6"/></svg></div>
-              <span class="xp-num">09</span>
-            </div>
-            <h3>FinOps</h3>
-            <p>Own cost across a 24-account AWS estate: right-sizing, reserved and Savings Plan coverage, cleanups, and a monthly cost-per-meter report.</p>
-            <div class="chips"><span>Savings Plans</span><span>RIs</span><span>Cost Explorer</span><span>Athena</span><span>tagging</span></div>
-            <div class="xp-bg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><circle cx="12" cy="12" r="8.8"/></svg></div>
-          </article>
-        </div>
-        <div class="xp-cell" data-reveal>
-          <article class="xp-card">
-            <div class="xp-top">
-              <div class="xp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5.5c0 4.3 2.9 8 7 9.5 4.1-1.5 7-5.2 7-9.5V6Z"/><path d="m9 12 2 2 4-4"/></svg></div>
-              <span class="xp-num">10</span>
-            </div>
-            <h3>Security &amp; governance</h3>
-            <p>Account guardrails with SCPs and tag policies, SSO permission sets in place of IAM users, and WAF rate limits on auth endpoints.</p>
-            <div class="chips"><span>Organizations</span><span>SCPs</span><span>Tag Policies</span><span>AWS SSO</span><span>WAF</span></div>
-            <div class="xp-bg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M12 3 5 6v5.5c0 4.3 2.9 8 7 9.5 4.1-1.5 7-5.2 7-9.5V6Z"/></svg></div>
-          </article>
-        </div>
-        <div class="xp-cell" data-reveal>
-          <article class="xp-card">
-            <div class="xp-top">
-              <div class="xp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5 2.6 19.8h18.8Z"/><path d="M12 9.8v4.6M12 17.1v.2"/></svg></div>
-              <span class="xp-num">11</span>
-            </div>
-            <h3>Incident response</h3>
-            <p>Carry on-call for the head-end and meter-data systems, lead the debugging, and write the postmortem so the fix outlives the incident.</p>
-            <div class="chips"><span>on-call</span><span>postmortems</span><span>runbooks</span><span>Performance Insights</span></div>
-            <div class="xp-bg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M12 3.5 2.6 19.8h18.8Z"/></svg></div>
-          </article>
-        </div>
-        <div class="xp-cell" data-reveal>
-          <article class="xp-card">
-            <div class="xp-top">
-              <div class="xp-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 5.2a3 3 0 0 1 0 5.6M18 14.4c1.8.8 3 2.6 3 4.6"/></svg></div>
-              <span class="xp-num">12</span>
-            </div>
-            <h3>Team leadership</h3>
-            <p>Lead a five-person team: three DevOps engineers, a support engineer and a security engineer. Sprint planning, reviews, on-call rota and sign-off on shared production changes.</p>
-            <div class="chips"><span>sprint planning</span><span>reviews</span><span>on-call rota</span><span>mentoring</span></div>
-            <div class="xp-bg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg></div>
-          </article>
-        </div>
-      </div>
+      <dl class="skills" data-reveal>
+        <div><dt>AWS</dt><dd>EKS, EC2, RDS and Aurora, MSK, ElastiCache, Lambda, IAM and SSO, Organizations, Cost Explorer</dd></div>
+        <div><dt>OCI</dt><dd>OKE, VCNs, load balancers, DRG</dd></div>
+        <div><dt>Kubernetes</dt><dd>Karpenter, KEDA, HPA and VPA, Helm, Argo CD</dd></div>
+        <div><dt>Messaging</dt><dd>Kafka on MSK and Strimzi, EMQX for MQTT</dd></div>
+        <div><dt>Databases</dt><dd>PostgreSQL, MySQL, Redis and Valkey, TimescaleDB</dd></div>
+        <div><dt>IaC and CI</dt><dd>Terraform, CloudFormation, CodePipeline, GitHub Actions</dd></div>
+        <div><dt>Monitoring</dt><dd>Prometheus, Grafana, Loki, CloudWatch</dd></div>
+      </dl>
     </div>
   </section>
 
   <section class="section alt" id="projects">
     <div class="container">
       <div class="section-head" data-reveal>
-        <div class="section-label">Selected work</div>
-        <h2 class="section-title">Projects</h2>
-        <p class="section-desc">Recent work on the platform, with the numbers that came out of it.</p>
+        <div class="section-label">Work</div>
+        <h2 class="section-title">Things I've worked on</h2>
       </div>
 
       <div data-reveal>
         <article class="proj-card featured" data-tilt>
           <div class="featured-copy">
-            <div class="proj-head">
-              <span class="proj-num">01</span>
-              <div class="proj-tags"><span class="ptag">CI/CD</span><span class="ptag amber">Featured</span></div>
-            </div>
-            <h3>Change-aware build pipeline</h3>
-            <p>Every commit used to rebuild and redeploy the whole platform, which took about 30 minutes even for a one-line change. I reworked the pipeline to compare the changed paths against a map of services, build only what changed, and deploy across AWS accounts with shared IAM roles.</p>
-            <div class="chips"><span>AWS</span><span>IAM</span><span>CI/CD</span><span>Git</span></div>
-            <div class="proj-metrics">
-              <div><span class="pm-value">30 → 3 min</span><span class="pm-label">typical build time</span></div>
-              <div><span class="pm-value">~90%</span><span class="pm-label">less time per commit</span></div>
-            </div>
+            <h3>Moving Kafka off MSK, and the mistake I made</h3>
+            <p>We moved Kafka from Amazon MSK to Strimzi, which runs Kafka on our own Kubernetes clusters. I set the new cluster to gzip compression because most of our applications already used it. I didn't check every one.</p>
+            <p>A few apps used lz4. Once traffic moved over they ran into trouble, and consumer lag kept going up. Going back halfway through wasn't a good option, so I wrote a small transcoder that let the lz4 apps keep working with the gzip messages. They caught up and the migration carried on.</p>
+            <p>Now I check every producer and consumer before I change a setting for the whole cluster.</p>
           </div>
           <div class="proj-visual">
             <canvas id="projCanvas" aria-hidden="true"></canvas>
-            <div class="arch-flow" aria-label="Pipeline: git push, compare changed paths with the service map, build changed services, deploy to each account, done in 2 to 4 minutes">
-              <div class="arch-layer"><div class="arch-box glow">git push</div></div>
+            <div class="arch-flow" aria-label="Producers write gzip into Kafka on Strimzi. Most consumers read it directly; a transcoder handles the older lz4 apps.">
+              <div class="arch-layer"><div class="arch-box glow">producers · gzip</div></div>
               <div class="arch-arrow"><span class="data-dot"></span></div>
-              <div class="arch-layer"><div class="arch-box">changed paths</div><div class="arch-box">service map</div></div>
+              <div class="arch-layer"><div class="arch-box">Kafka on Strimzi</div></div>
               <div class="arch-arrow"><span class="data-dot" style="animation-delay: 0.4s"></span></div>
-              <div class="arch-layer"><div class="arch-box glow">build changed services only</div></div>
+              <div class="arch-layer"><div class="arch-box">most consumers</div><div class="arch-box glow">transcoder</div></div>
               <div class="arch-arrow"><span class="data-dot" style="animation-delay: 0.8s"></span></div>
-              <div class="arch-layer"><div class="arch-box">account A</div><div class="arch-box">account B</div><div class="arch-box">account C</div></div>
-              <div class="arch-arrow"><span class="data-dot" style="animation-delay: 1.2s"></span></div>
-              <div class="arch-layer"><div class="arch-box done">done in 2–4 min</div></div>
+              <div class="arch-layer"><div class="arch-box done">lz4 apps caught up</div></div>
             </div>
           </div>
         </article>
       </div>
 
-      <div class="proj-grid">
+      <div class="proj-grid two">
         <div class="proj-cell" data-reveal>
           <article class="proj-card" data-tilt>
-            <div class="proj-head"><span class="proj-num">02</span><div class="proj-tags"><span class="ptag">Kubernetes</span></div></div>
-            <h3>EKS fleet upgrade</h3>
-            <p>Moved EKS from 1.33 to 1.35 across five AWS accounts before extended-support pricing applied, working through launch template, custom AMI and IMDS issues.</p>
-            <div class="chips"><span>EKS</span><span>EC2</span><span>Auto Scaling</span></div>
-            <div class="proj-metrics"><div><span class="pm-value">5</span><span class="pm-label">AWS accounts</span></div><div><span class="pm-value">1.33 → 1.35</span><span class="pm-label">EKS version</span></div></div>
+            <h3>Keeping up with 2 million meters</h3>
+            <p>Readings from over 2 million meters come in through four production EKS clusters. I moved them off fixed node groups to Karpenter, with KEDA scaling the Kafka consumers on lag and HPA and VPA handling the rest.</p>
+            <p>I left some things fixed on purpose. The meter-data workloads have steady load, so they run on fixed capacity and don't get moved around.</p>
           </article>
         </div>
         <div class="proj-cell" data-reveal>
           <article class="proj-card" data-tilt>
-            <div class="proj-head"><span class="proj-num">03</span><div class="proj-tags"><span class="ptag violet">Messaging</span></div></div>
-            <h3>MQTT broker move to OCI</h3>
-            <p>Designed the move of an EMQX cluster from AWS to OCI, which meant reworking TLS termination and spreading nodes across fault domains.</p>
-            <div class="chips"><span>EMQX</span><span>MQTT</span><span>OCI</span></div>
-            <div class="proj-metrics"><div><span class="pm-value">AWS → OCI</span><span class="pm-label">broker migration</span></div></div>
+            <h3>The AWS bill</h3>
+            <p>Across 22 AWS accounts the bill runs at around $50K a month, and keeping it down is part of my job. Most of the savings came from plain work: right-sizing, a node group nobody was using, old CloudWatch agents in six accounts, reserved instances for Aurora, and turning dev and stage off out of hours.</p>
+            <p>Together that's about $45K a year saved.</p>
           </article>
         </div>
         <div class="proj-cell" data-reveal>
           <article class="proj-card" data-tilt>
-            <div class="proj-head"><span class="proj-num">04</span><div class="proj-tags"><span class="ptag violet">Streaming</span></div></div>
-            <h3>Kafka on Kubernetes</h3>
-            <p>Moving managed MSK clusters to Strimzi. Root-caused an outage where the operator's 30-day reconcile deleted SCRAM users created outside it.</p>
-            <div class="chips"><span>Kafka</span><span>Strimzi</span><span>SCRAM</span></div>
-            <div class="proj-metrics"><div><span class="pm-value">MSK → Strimzi</span><span class="pm-label">in progress</span></div></div>
+            <h3>An old app from $2,200 to $1,300 a month</h3>
+            <p>One legacy application still ran on Python 2.7 with MySQL 8 behind it, and it cost about $2,200 a month to keep running. I moved it and cut what it didn't need. It now costs about $1,300 a month.</p>
           </article>
         </div>
         <div class="proj-cell" data-reveal>
           <article class="proj-card" data-tilt>
-            <div class="proj-head"><span class="proj-num">05</span><div class="proj-tags"><span class="ptag amber">Observability</span></div></div>
-            <h3>Alerting and cost audit</h3>
-            <p>Traced a $13/day CloudWatch charge to one wildcard alert rule, and found routing that sent almost every alert to a null receiver.</p>
-            <div class="chips"><span>Grafana</span><span>CloudWatch</span><span>Alertmanager</span></div>
-            <div class="proj-metrics"><div><span class="pm-value">$4.7K</span><span class="pm-label">per year found</span></div></div>
-          </article>
-        </div>
-        <div class="proj-cell" data-reveal>
-          <article class="proj-card" data-tilt>
-            <div class="proj-head"><span class="proj-num">06</span><div class="proj-tags"><span class="ptag">Data</span></div></div>
-            <h3>RDS to EC2 migration</h3>
-            <p>Moved three months of data off RDS with a checksum-verified pipeline that resumes cleanly when the 60-minute session limit kills a run.</p>
-            <div class="chips"><span>MySQL</span><span>RDS</span><span>SSM</span><span>mydumper</span></div>
-            <div class="proj-metrics"><div><span class="pm-value">resume-safe</span><span class="pm-label">no re-copying on restart</span></div></div>
-          </article>
-        </div>
-        <div class="proj-cell" data-reveal>
-          <article class="proj-card" data-tilt>
-            <div class="proj-head"><span class="proj-num">07</span><div class="proj-tags"><span class="ptag amber">Capacity</span></div></div>
-            <h3>Capacity model for 10 million meters</h3>
-            <p>Built a capacity model from 14 days of production data (Kafka offsets, load-balancer logs, database load) to size a 10-million-meter rollout instead of multiplying today's numbers. Pods and Kafka partitions scale out; the database writer doesn't. Its load is 85–100% writes, so read replicas can't help. Checked against a second week of data, I/O-bound consumers drained 7–35× slower than a CPU-only model predicted.</p>
-            <div class="chips"><span>Kafka</span><span>Aurora</span><span>Performance Insights</span><span>Locust</span></div>
-            <div class="proj-metrics"><div><span class="pm-value">10M</span><span class="pm-label">meters modelled</span></div><div><span class="pm-value">~5M</span><span class="pm-label">serverless writer ceiling</span></div></div>
-          </article>
-        </div>
-        <div class="proj-cell" data-reveal>
-          <article class="proj-card" data-tilt>
-            <div class="proj-head"><span class="proj-num">08</span><div class="proj-tags"><span class="ptag">Kubernetes</span></div></div>
-            <h3>Layered autoscaling on EKS</h3>
-            <p>Moved the head-end services from static node groups to Karpenter, with KEDA scaling Kafka consumers on lag, HPA on request services and Goldilocks-guided VPA for sizing. Some services stay pinned on purpose: a decode fleet sized one-to-one with its partitions beats one that rebalances all day.</p>
-            <div class="chips"><span>Karpenter</span><span>KEDA</span><span>HPA</span><span>VPA</span></div>
-            <div class="proj-metrics"><div><span class="pm-value">4</span><span class="pm-label">production clusters</span></div><div><span class="pm-value">1.5M</span><span class="pm-label">meters served</span></div></div>
-          </article>
-        </div>
-        <div class="proj-cell" data-reveal>
-          <article class="proj-card" data-tilt>
-            <div class="proj-head"><span class="proj-num">09</span><div class="proj-tags"><span class="ptag violet">Streaming</span></div></div>
-            <h3>MSK and ElastiCache off managed services</h3>
-            <p>Cut one production cluster over from MSK to Strimzi on KRaft and from ElastiCache to Valkey 9. I measured MirrorMaker 2 first: it was I/O-bound at about 2k messages a second, far too slow to copy history, so we switched at the live tail with a small reprocess and kept the managed services warm as the rollback.</p>
-            <div class="chips"><span>Strimzi</span><span>KRaft</span><span>MirrorMaker 2</span><span>Valkey</span></div>
-            <div class="proj-metrics"><div><span class="pm-value">MSK → Strimzi</span><span class="pm-label">Kafka, on KRaft</span></div><div><span class="pm-value">ElastiCache → Valkey</span><span class="pm-label">cache, on Valkey 9</span></div></div>
-          </article>
-        </div>
-        <div class="proj-cell" data-reveal>
-          <article class="proj-card" data-tilt>
-            <div class="proj-head"><span class="proj-num">10</span><div class="proj-tags"><span class="ptag">Reliability</span></div></div>
-            <h3>Zone-failover drill</h3>
-            <p>Ran a full failover round trip for the head-end and meter-data workloads on two production clusters: out to a second availability zone and back. The drill found two wrong assumptions in the plan: a cluster autoscaler kept reviving the source node group, and meter-data pods were pinned to a node-group name.</p>
-            <div class="chips"><span>EKS</span><span>Karpenter</span><span>Cluster Autoscaler</span><span>runbooks</span></div>
-            <div class="proj-metrics"><div><span class="pm-value">1a → 1c → 1a</span><span class="pm-label">round trip</span></div><div><span class="pm-value">2</span><span class="pm-label">clusters drilled</span></div></div>
-          </article>
-        </div>
-        <div class="proj-cell" data-reveal>
-          <article class="proj-card" data-tilt>
-            <div class="proj-head"><span class="proj-num">11</span><div class="proj-tags"><span class="ptag">Governance</span></div></div>
-            <h3>Tagging and guardrails for 24 accounts</h3>
-            <p>Designed the tag taxonomy, tag policy and SCP model for a flat 24-account organisation. Backfilled canonical tags on a production account, and kept cost tags report-only on purpose: blocking launches on a missing tag would have stopped about 44% of node launches mid-scale-up.</p>
-            <div class="chips"><span>Organizations</span><span>SCPs</span><span>Tag Policies</span><span>cost allocation</span></div>
-            <div class="proj-metrics"><div><span class="pm-value">56% → 100%</span><span class="pm-label">instances fully tagged</span></div></div>
-          </article>
-        </div>
-        <div class="proj-cell" data-reveal>
-          <article class="proj-card" data-tilt>
-            <div class="proj-head"><span class="proj-num">12</span><div class="proj-tags"><span class="ptag amber">FinOps</span></div></div>
-            <h3>Pricing flow logs before turning them on</h3>
-            <p>Measured VPC Flow Logs on two production VPCs before a rollout. Logging all traffic would grow to about $15.4K a month at 1.2 million meters. Reject-only logging costs $0.93 a month today and stays at a few dollars at that scale, because rejects are almost all internet port scans and don't grow with meter count.</p>
-            <div class="chips"><span>VPC Flow Logs</span><span>CloudWatch</span><span>Athena</span></div>
-            <div class="proj-metrics"><div><span class="pm-value">~1,000×</span><span class="pm-label">cost gap, all vs reject-only</span></div><div><span class="pm-value">$0.93</span><span class="pm-label">per month, reject-only</span></div></div>
+            <h3>Builds that only rebuild what changed</h3>
+            <p>Every commit used to rebuild and redeploy the whole platform, which took about 30 minutes even for a one-line change. I changed the pipeline to work out which services a commit touches and build only those. Most builds now take 2 to 4 minutes.</p>
           </article>
         </div>
       </div>
@@ -1287,73 +1032,28 @@
   <section class="section" id="incidents">
     <div class="container">
       <div class="section-head" data-reveal>
-        <div class="section-label">On call</div>
-        <h2 class="section-title">Incidents I've debugged</h2>
-        <p class="section-desc">Production problems I traced to a root cause, and what changed afterwards.</p>
+        <div class="section-label">Incidents</div>
+        <h2 class="section-title">Things that broke</h2>
+        <p class="section-desc">A few production problems and how I tracked them down.</p>
       </div>
 
       <div class="proj-grid">
         <div class="proj-cell" data-reveal>
           <article class="proj-card" data-tilt>
-            <div class="proj-head"><span class="proj-num">01</span><div class="proj-tags"><span class="ptag">Postgres</span><span class="ptag violet">OCI</span></div></div>
-            <h3>Fork failures that looked like network errors</h3>
-            <p>Every service on a head-end cluster kept losing its database connection with "unexpected EOF". The database host ran strict memory overcommit with no swap, so Postgres had about 140 MB left to fork new backends. The fix was one kernel setting, with no restart.</p>
-            <div class="chips"><span>PostgreSQL</span><span>Linux</span><span>OKE</span></div>
-            <div class="proj-metrics"><div><span class="pm-value">140 MB → 10 GB</span><span class="pm-label">fork headroom</span></div></div>
+            <h3>It looked like the network. It wasn't.</h3>
+            <p>Every service on one cluster kept losing its Postgres connection with "unexpected EOF". The database server had strict memory overcommit and no swap, so Postgres had only about 140 MB left to start new connections. One kernel setting fixed it, without a restart.</p>
           </article>
         </div>
         <div class="proj-cell" data-reveal>
           <article class="proj-card" data-tilt>
-            <div class="proj-head"><span class="proj-num">02</span><div class="proj-tags"><span class="ptag">Postgres</span></div></div>
-            <h3>A restart loop caused by stuck queries</h3>
-            <p>About sixty pods kept failing health checks. Day-old orphaned queries had pinned the vacuum horizon, tables bloated, and the database sat at its disk IOPS cap. I cancelled them, set statement timeouts, vacuumed, and added two missing indexes.</p>
-            <div class="chips"><span>PostgreSQL</span><span>autovacuum</span><span>pg_cron</span></div>
-            <div class="proj-metrics"><div><span class="pm-value">~10k → 1.5k</span><span class="pm-label">read IOPS</span></div><div><span class="pm-value">194 → 0.9 ms</span><span class="pm-label">hottest query</span></div></div>
+            <h3>An autoscaler that starved its own consumers</h3>
+            <p>A Kafka consumer group kept rebalancing and never caught up. Lag got to 20 million messages. VPA had shrunk the decoder pods from 500m CPU to about 53m, so each batch took longer than the poll timeout and Kafka kept kicking them out. I fixed the CPU at 200m and set VPA to recommend only.</p>
           </article>
         </div>
         <div class="proj-cell" data-reveal>
           <article class="proj-card" data-tilt>
-            <div class="proj-head"><span class="proj-num">03</span><div class="proj-tags"><span class="ptag">Kubernetes</span><span class="ptag violet">Kafka</span></div></div>
-            <h3>An autoscaler that starved its consumers</h3>
-            <p>A Kafka consumer group was stuck in an endless rebalance. VPA had shrunk decode pods from 500m to about 53m of CPU, so each batch outran the poll timeout and offsets never committed. I pinned the resources and kept VPA as recommend-only.</p>
-            <div class="chips"><span>VPA</span><span>Goldilocks</span><span>KEDA</span><span>Kafka</span></div>
-            <div class="proj-metrics"><div><span class="pm-value">20.3M</span><span class="pm-label">messages of lag</span></div><div><span class="pm-value">53m → 200m</span><span class="pm-label">CPU per pod</span></div></div>
-          </article>
-        </div>
-        <div class="proj-cell" data-reveal>
-          <article class="proj-card" data-tilt>
-            <div class="proj-head"><span class="proj-num">04</span><div class="proj-tags"><span class="ptag violet">MQTT</span></div></div>
             <h3>An MQTT cluster that couldn't start from zero</h3>
-            <p>A boot script's cluster-join check found peers by EC2 tag and, when none of them answered, assumed the join had failed and stopped the broker. With every node down at once, no node could ever go first. I seeded one node by hand, joined the rest and restored the config from backup. The boot log, not the broker log, showed it, and it also showed the same check had quietly stopped the backups.</p>
-            <div class="chips"><span>EMQX</span><span>Auto Scaling</span><span>user data</span><span>SSM</span></div>
-            <div class="proj-metrics"><div><span class="pm-value">187 bytes</span><span class="pm-label">size of the empty backups that gave it away</span></div></div>
-          </article>
-        </div>
-        <div class="proj-cell" data-reveal>
-          <article class="proj-card" data-tilt>
-            <div class="proj-head"><span class="proj-num">05</span><div class="proj-tags"><span class="ptag">IaC</span></div></div>
-            <h3>A load balancer with zero targets</h3>
-            <p>Clients couldn't reach a healthy MQTT cluster. A CloudFormation update had rewritten the Auto Scaling group's target groups and dropped one I had attached by hand weeks earlier. I put that target group in the template for both production stacks, including the one that hadn't broken yet.</p>
-            <div class="chips"><span>CloudFormation</span><span>NLB</span><span>Auto Scaling</span></div>
-            <div class="proj-metrics"><div><span class="pm-value">0 → 3</span><span class="pm-label">healthy targets in 30 s</span></div><div><span class="pm-value">2</span><span class="pm-label">stacks fixed</span></div></div>
-          </article>
-        </div>
-        <div class="proj-cell" data-reveal>
-          <article class="proj-card" data-tilt>
-            <div class="proj-head"><span class="proj-num">06</span><div class="proj-tags"><span class="ptag">Aurora</span></div></div>
-            <h3>An Aurora writer running out of memory</h3>
-            <p>A meter-data Aurora writer was being restarted every few minutes. A table had just moved to 1,219 daily partitions, and a hot UPDATE by id didn't filter on the partition key, so each call opened every partition across about 200 connections. I diagnosed it from RDS events, Performance Insights and logs, and the change was rolled back the same day.</p>
-            <div class="chips"><span>Aurora PostgreSQL</span><span>partitioning</span><span>Performance Insights</span></div>
-            <div class="proj-metrics"><div><span class="pm-value">1,219</span><span class="pm-label">partitions</span></div><div><span class="pm-value">~7,000</span><span class="pm-label">relations opened per UPDATE</span></div></div>
-          </article>
-        </div>
-        <div class="proj-cell" data-reveal>
-          <article class="proj-card" data-tilt>
-            <div class="proj-head"><span class="proj-num">07</span><div class="proj-tags"><span class="ptag">Data</span></div></div>
-            <h3>A time-series database at 97% disk</h3>
-            <p>I dropped old TimescaleDB chunks table by table, because one big drop exhausts the lock table. Then I shrank the root volume by cloning onto a smaller disk with the same filesystem UUID. I boot-tested the clone before the swap; the IPs stayed the same and downtime was about ten minutes.</p>
-            <div class="chips"><span>TimescaleDB</span><span>EBS</span><span>rsync</span><span>GRUB</span></div>
-            <div class="proj-metrics"><div><span class="pm-value">811 GB</span><span class="pm-label">freed</span></div><div><span class="pm-value">950 → 120 GiB</span><span class="pm-label">root volume</span></div></div>
+            <p>After every broker went down at once, none of them would come back. The boot script looked for other nodes to join and stopped the broker when nobody answered, so no node could go first. I started one by hand, joined the rest to it and restored the config. The same check had also been quietly breaking our backups. They were 187 bytes each.</p>
           </article>
         </div>
       </div>
@@ -1365,22 +1065,22 @@
       <div class="section-head" data-reveal>
         <div class="section-label">Career</div>
         <h2 class="section-title">Experience</h2>
-        <p class="section-desc">Three years at Polaris Smart Metering, from intern to leading the infrastructure team.</p>
+        <p class="section-desc">Three years at Polaris Smart Metering. I joined as an intern and now lead the infrastructure team.</p>
       </div>
       <ul class="now-list">
         <li class="now-item" data-reveal>
           <span class="now-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8.5 7V5.5A1.5 1.5 0 0 1 10 4h4a1.5 1.5 0 0 1 1.5 1.5V7M3 12.5h18"/></svg></span>
-          <span><span class="now-title">DevOps Engineer · Infrastructure Team Lead</span><br><span class="now-meta">Polaris Smart Metering · team of 5 · 24 AWS accounts · 4 production EKS clusters</span></span>
+          <span><span class="now-title">DevOps Engineer, Infrastructure Team Lead</span><br><span class="now-meta">Polaris Smart Metering · team of five · 22 AWS accounts and OCI</span></span>
           <span class="now-status">May 2025 – now</span>
         </li>
         <li class="now-item" data-reveal>
           <span class="now-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8.5 7V5.5A1.5 1.5 0 0 1 10 4h4a1.5 1.5 0 0 1 1.5 1.5V7M3 12.5h18"/></svg></span>
-          <span><span class="now-title">AWS Cloud Engineer</span><br><span class="now-meta">Polaris Smart Metering · IAM &amp; SSO model · Redis to ElastiCache · Kafka to MSK · EMQX cluster for 100K+ connections</span></span>
+          <span><span class="now-title">AWS Cloud Engineer</span><br><span class="now-meta">Polaris Smart Metering · set up SSO for the team, moved Redis and Kafka onto ElastiCache and MSK, built our first EMQX cluster</span></span>
           <span class="now-status">Nov 2023 – Apr 2025</span>
         </li>
         <li class="now-item" data-reveal>
           <span class="now-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8.5 7V5.5A1.5 1.5 0 0 1 10 4h4a1.5 1.5 0 0 1 1.5 1.5V7M3 12.5h18"/></svg></span>
-          <span><span class="now-title">Cloud Engineering Intern</span><br><span class="now-meta">Polaris Smart Metering · mapped the AWS footprint · first alarms and dashboards · fleet tagging</span></span>
+          <span><span class="now-title">Cloud Engineering Intern</span><br><span class="now-meta">Polaris Smart Metering · mapped what we had in AWS, set up the first alarms and dashboards</span></span>
           <span class="now-status">Aug – Oct 2023</span>
         </li>
         <li class="now-item" data-reveal>
@@ -1393,9 +1093,8 @@
       <div class="proj-grid">
         <div class="proj-cell wide" data-reveal>
           <article class="proj-card" data-tilt>
-            <div class="proj-head"><span class="proj-num">01</span><div class="proj-tags"><span class="ptag violet">Certified</span></div></div>
             <h3>Certifications</h3>
-            <p>Four current certifications across Kubernetes, AWS and Terraform. Each one opens its record on Credly.</p>
+            <p>Each one links to its Credly record.</p>
             <div class="certs">
               <a class="cert" href="https://www.credly.com/badges/08d52b8c-f11f-43cf-b497-4d449ecc92f1" target="_blank" rel="noopener"><img src="/badges/dea.png" alt="" width="40" height="40" loading="lazy"><span><span class="cert-name">AWS Data Engineer – Associate</span><span class="cert-meta">May 2026</span></span><span class="cert-verify">Verify ↗</span></a>
               <a class="cert" href="https://www.credly.com/badges/fed0d324-7e61-4401-a86d-37cf9643d947" target="_blank" rel="noopener"><img src="/badges/cka.png" alt="" width="40" height="40" loading="lazy"><span><span class="cert-name">Certified Kubernetes Administrator</span><span class="cert-meta">Dec 2025</span></span><span class="cert-verify">Verify ↗</span></a>
@@ -1411,34 +1110,21 @@
   <section class="section" id="now">
     <div class="container">
       <div class="section-head" data-reveal>
-        <div class="section-label">Currently</div>
+        <div class="section-label">Now</div>
         <h2 class="section-title">What I'm working on</h2>
       </div>
       <ul class="now-list">
         <li class="now-item" data-reveal>
-          <span class="now-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5Z"/><path d="m3 13 9 5 9-5"/></svg></span>
-          <span><span class="now-title">Moving Kafka from MSK to Strimzi</span><br><span class="now-meta">Kubernetes · Kafka</span></span>
-          <span class="now-status">in progress</span>
-        </li>
-        <li class="now-item" data-reveal>
-          <span class="now-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h3.5l2.2-5.5 4.6 11 2.3-5.5H21"/></svg></span>
-          <span><span class="now-title">Network observability with VPC Flow Logs</span><br><span class="now-meta">AWS · production accounts</span></span>
-          <span class="now-status">in progress</span>
-        </li>
-        <li class="now-item" data-reveal>
-          <span class="now-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7l6 6 4-4 8 8"/><path d="M15 17h6v-6"/></svg></span>
-          <span><span class="now-title">Cutting infrastructure cost per device</span><br><span class="now-meta">Cost program</span></span>
-          <span class="now-status">in progress</span>
-        </li>
-        <li class="now-item" data-reveal>
           <span class="now-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 20.5h17"/><path d="M6.5 17v-3.5M11 17V9.5M15.5 17V6"/><path d="m17.5 6.5 2-2.5 2 2.5"/></svg></span>
-          <span><span class="now-title">Capacity planning for a 10-million-meter rollout</span><br><span class="now-meta">Kafka · Aurora · load modelling</span></span>
-          <span class="now-status">in progress</span>
+          <span><span class="now-title">Planning for 10 million meters</span><br><span class="now-meta">Working out where Kafka and the databases run out of room at five times today's load</span></span>
         </li>
         <li class="now-item" data-reveal>
           <span class="now-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 7-5 5 5 5M16 7l5 5-5 5M13.5 4.5l-3 15"/></svg></span>
-          <span><span class="now-title">A new state-utility platform, built as code from day one</span><br><span class="now-meta">Terraform · Argo CD · APISIX · dev, stage and prod repos</span></span>
-          <span class="now-status">in progress</span>
+          <span><span class="now-title">A new state's platform, in Terraform from day one</span><br><span class="now-meta">Terraform · Argo CD</span></span>
+        </li>
+        <li class="now-item" data-reveal>
+          <span class="now-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v16H5.5A1.5 1.5 0 0 1 4 18.5Z"/><path d="M20 5.5A1.5 1.5 0 0 0 18.5 4H13v16h5.5a1.5 1.5 0 0 0 1.5-1.5Z"/></svg></span>
+          <span><span class="now-title">Learning backend engineering and DSA</span><br><span class="now-meta">On Boot.dev, in Python</span></span>
         </li>
       </ul>
     </div>
@@ -1448,8 +1134,8 @@
     <div class="container contact-grid">
       <div data-reveal>
         <div class="section-label">Contact</div>
-        <h2 class="contact-title">Let's talk</h2>
-        <p class="section-desc">Open to infrastructure, platform and SRE roles. Email is the fastest way to reach me.</p>
+        <h2 class="contact-title">Get in touch</h2>
+        <p class="section-desc">If you're working on something similar, or hiring for it, email is the quickest way to reach me.</p>
         <div class="contact-rows">
           <div class="c-row"><span class="c-label">Email</span><a class="c-val" id="c-email" href="mailto:nagilsushant@gmail.com">nagilsushant@gmail.com</a><button class="c-copy" type="button" data-copy="c-email">Copy</button></div>
           <div class="c-row"><span class="c-label">GitHub</span><a class="c-val" id="c-github" href="https://github.com/sushant-enigma" target="_blank" rel="noopener">github.com/sushant-enigma</a><button class="c-copy" type="button" data-copy="c-github">Copy</button></div>
@@ -1460,13 +1146,11 @@
       <div data-reveal>
         <div class="avail-card">
           <div class="orbit-g" aria-hidden="true"><div class="ring"></div><div class="ring r2"></div><div class="core"></div></div>
-          <span class="avail-status">Available</span>
-          <p class="avail-title">Looking for my next infrastructure role</p>
+          <p class="avail-title">Jaipur, India</p>
           <ul class="avail-list">
-            <li><span>Roles</span><span>Infrastructure, Platform, SRE</span></li>
-            <li><span>Stack</span><span>Kubernetes, Kafka, MQTT, AWS, OCI</span></li>
-            <li><span>Experience</span><span>3 years, leading a team of 5</span></li>
-            <li><span>Based in</span><span>Jaipur, India</span></li>
+            <li><span>Work</span><span>Cloud &amp; DevOps lead, Polaris Smart Metering</span></li>
+            <li><span>Stack</span><span>AWS, OCI, Kubernetes, Kafka, MQTT</span></li>
+            <li><span>Certified</span><span>CKA, AWS Solutions Architect and Data Engineer, Terraform</span></li>
           </ul>
         </div>
       </div>
@@ -1529,7 +1213,7 @@
 
     // ---------- split about text into words ----------
     var introEl = document.getElementById('introText');
-    var HL = ['kubernetes', 'kafka', 'mqtt', 'aws', 'oci', 'smart-metering', 'iot'];
+    var HL = ['aws', 'oci', 'kubernetes', 'mqtt', 'kafka'];
     var words = [];
     var parts = introEl.textContent.trim().split(/\s+/);
     introEl.textContent = '';
@@ -1552,48 +1236,11 @@
       return (el.dataset.prefix || '') + v.toFixed(d) + (el.dataset.suffix || '');
     }
     if (animate) {
-      G.set(['#heroLabel', '#heroTerminal', '#heroActions', '#heroScroll'], { opacity: 0, y: 24 });
+      G.set(['#heroLabel', '#heroSub', '#heroActions', '#heroScroll'], { opacity: 0, y: 24 });
       G.set('.hero-title .line-inner', { yPercent: 110 });
       G.set('.arch .av', { opacity: 0 });
       G.set(revealEls, { opacity: 0, y: 40 });
       counters.forEach(function (el) { el.textContent = fmt(el, 0); });
-    }
-
-    // ---------- terminal typing ----------
-    var cmds = [
-      { cmd: 'cat focus.txt', out: '→ kubernetes | kafka | mqtt | aws | oci' },
-      { cmd: 'kubectl version --short', out: '→ eks 1.35 across 5 aws accounts' },
-      { cmd: 'ci build --changed-only', out: '→ 30 min → 2-4 min per build' },
-      { cmd: 'grep wildcard alerts.yml', out: '→ found: $13/day on one alert rule' },
-      { cmd: 'kubectl get nodepools', out: '→ karpenter + keda + hpa + vpa on 4 prod clusters' },
-      { cmd: 'du -sh /var/lib/postgresql', out: '→ 892G → 81G after pruning old chunks' },
-      { cmd: 'whoami', out: '→ infra team lead · 5 engineers · CKA' }
-    ];
-    var typingEl = document.getElementById('typingText');
-    var outEl = document.getElementById('termOut');
-    var typingStarted = false;
-    function startTyping() {
-      if (typingStarted || reduce) return;
-      typingStarted = true;
-      var ci = 1;
-      function typeCmd() {
-        var c = cmds[ci % cmds.length];
-        var i = 0;
-        typingEl.textContent = '';
-        outEl.textContent = '';
-        (function ch() {
-          if (i < c.cmd.length) {
-            typingEl.textContent += c.cmd.charAt(i++);
-            setTimeout(ch, 38 + Math.random() * 40);
-          } else {
-            setTimeout(function () {
-              outEl.textContent = c.out;
-              setTimeout(function () { ci++; typeCmd(); }, 2600);
-            }, 280);
-          }
-        })();
-      }
-      setTimeout(typeCmd, 2200);
     }
 
     // ---------- scroll-driven animations ----------
@@ -1607,7 +1254,7 @@
       var tl = G.timeline({ defaults: { ease: 'expo.out' } });
       tl.to('#heroLabel', { opacity: 1, y: 0, duration: 0.7 })
         .to('.hero-title .line-inner', { yPercent: 0, duration: 0.9, stagger: 0.1 }, '-=0.4')
-        .to('#heroTerminal', { opacity: 1, y: 0, duration: 0.7, onComplete: startTyping }, '-=0.55')
+        .to('#heroSub', { opacity: 1, y: 0, duration: 0.7 }, '-=0.55')
         .to('#heroActions', { opacity: 1, y: 0, duration: 0.7 }, '-=0.5')
         .to('#heroScroll', { opacity: 1, y: 0, duration: 0.7 }, '-=0.3');
 
@@ -1667,7 +1314,7 @@
         loader.classList.add('done');
         setTimeout(function () { loader.remove(); }, formMode ? 1300 : 700);
       }
-      if (animate) initGSAP(); else startTyping();
+      if (animate) initGSAP();
     }
     if (reduce) {
       loader.remove();
@@ -1683,8 +1330,8 @@
       var fill = document.getElementById('loaderFill');
       var ltxt = document.getElementById('loaderText');
       var stages = formMode
-        ? [[25, 'Gathering dust...'], [50, 'Igniting the disk...'], [75, 'Bending light...'], [100, 'All systems up.']]
-        : [[25, 'Starting clusters...'], [50, 'Connecting brokers...'], [75, 'Loading projects...'], [100, 'All systems up.']];
+        ? [[25, ''], [50, ''], [75, ''], [100, '']]
+        : [[25, ''], [50, ''], [75, ''], [100, '']];
       var k = 0;
       (function step() {
         if (k >= stages.length) { setTimeout(start, formMode ? 400 : 320); return; }
