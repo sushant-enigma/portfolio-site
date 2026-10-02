@@ -2114,7 +2114,7 @@
         if (on && ac.state === 'suspended') ac.resume();
         snd.master.gain.cancelScheduledValues(now);
         snd.master.gain.setValueAtTime(snd.master.gain.value, now);
-        snd.master.gain.linearRampToValueAtTime(on ? 0.35 : 0, now + (on ? 2.5 : 0.6));
+        snd.master.gain.linearRampToValueAtTime(on ? 0.45 : 0, now + (on ? 2.5 : 0.6));
         if (!on) setTimeout(function () { if (!snd.on) ac.suspend(); }, 800);
       }
       paintSound();
