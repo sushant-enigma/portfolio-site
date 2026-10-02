@@ -117,12 +117,14 @@
   .loader-text { font-family: var(--mono); font-size: 0.78rem; color: var(--text-2); letter-spacing: 0.04em; }
   .loader.done { pointer-events: none; }
   /* enter screen: waits for one click, which also lets the browser start the sound */
-  .loader.gated { animation: none; }
-  .gate { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; opacity: 0; pointer-events: none; transition: opacity 1.4s var(--ease); }
-  .gate.show { opacity: 1; pointer-events: auto; }
-  /* wide screens: the black hole sits right of centre, so the button goes just beneath it */
-  @media (min-aspect-ratio: 4/5) { .gate { inset: auto; left: 67%; top: 75%; transform: translate(-50%, -50%); } }
-  .loader.done .gate { opacity: 0; pointer-events: none; transition-duration: 0.5s; }
+  /* the Enter screen: a tear in space that rips open onto the site. It covers the page completely */
+  .rift { position: fixed; inset: 0; z-index: 10000; background: #020309; }
+  .rift.drawn { background: transparent; }
+  .rift.opening { pointer-events: none; }
+  #riftCanvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .rift-ui { position: absolute; left: 0; right: 0; top: 82%; display: flex; flex-direction: column; align-items: center; gap: 16px; transform: translateY(-50%); opacity: 0; transition: opacity 1.4s var(--ease); }
+  .rift-ui.show { opacity: 1; }
+  .rift.opening .rift-ui { opacity: 0; transition-duration: 0.3s; }
   .gate-enter {
     padding: 16px 46px; border-radius: 999px;
     border: 1px solid rgba(124, 196, 255, 0.45); background: rgba(5, 7, 15, 0.55);
@@ -191,7 +193,7 @@
   html.cursor-on .cursor-dot, html.cursor-on .cursor-ring { display: block; }
   html.cursor-on, html.cursor-on a, html.cursor-on button { cursor: none; }
   .cursor-dot {
-    position: fixed; left: 0; top: 0; z-index: 10000; pointer-events: none;
+    position: fixed; left: 0; top: 0; z-index: 10001; pointer-events: none;
     width: 8px; height: 8px; margin: -4px 0 0 -4px;
     border-radius: 50%;
     background: var(--accent);
@@ -199,7 +201,7 @@
     opacity: 0;
   }
   .cursor-ring {
-    position: fixed; left: 0; top: 0; z-index: 10000; pointer-events: none;
+    position: fixed; left: 0; top: 0; z-index: 10001; pointer-events: none;
     width: 40px; height: 40px; margin: -20px 0 0 -20px;
     border: 1.5px solid rgba(124, 196, 255, 0.45);
     border-radius: 50%;
@@ -795,7 +797,10 @@
   <div class="loader-logo">S<span>N</span></div>
   <div class="loader-bar"><div class="loader-fill" id="loaderFill"></div></div>
   <div class="loader-text" id="loaderText"></div>
-  <div class="gate" id="gate" hidden>
+</div>
+<div class="rift" id="rift" hidden>
+  <canvas id="riftCanvas" aria-hidden="true"></canvas>
+  <div class="rift-ui" id="riftUi">
     <button class="gate-enter" id="gateEnter" type="button">Enter</button>
     <button class="gate-quiet" id="gateQuiet" type="button">enter without sound</button>
   </div>
@@ -1349,6 +1354,8 @@
 <script>
   (function () {
     var root = document.documentElement;
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
     var G = window.gsap, ST = window.ScrollTrigger;
@@ -1474,6 +1481,165 @@
       if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { ST.refresh(); });
     }
 
+    // ---------- the Enter screen: a tear in space that opens onto the site ----------
+    var riftState = { opening: false, open: 0, flash: 0, intro: 0, t: 0, run: false };
+    var riftEl = document.getElementById('rift');
+    var riftCv = riftEl ? document.getElementById('riftCanvas') : null;
+    var rctx = riftCv ? riftCv.getContext('2d') : null;
+    var RW = 0, RH = 0, RPR = 1, riftStars = null, riftSparks = [];
+    var RSEG = 140;
+    // the jagged shape of each edge: a smoothed random walk with a few sharp splinters, plus a flicker phase per point
+    function riftEdge() {
+      var pts = [], v = 0;
+      for (var i = 0; i <= RSEG; i++) {
+        v = v * 0.82 + (Math.random() * 2 - 1) * 0.55;
+        pts.push({ base: v + (Math.random() < 0.05 ? (Math.random() * 2 - 1) * 2.2 : 0), ph: Math.random() * 6.283, sp: 0.8 + Math.random() * 2.2 });
+      }
+      return pts;
+    }
+    var riftL = riftEdge(), riftR = riftEdge();
+    var riftBendP = [Math.random() * 6.283, Math.random() * 6.283];
+    function riftSize() {
+      RPR = Math.min(window.devicePixelRatio || 1, 1.5);
+      RW = window.innerWidth; RH = window.innerHeight;
+      riftCv.width = Math.round(RW * RPR); riftCv.height = Math.round(RH * RPR);
+      riftStars = document.createElement('canvas');
+      riftStars.width = riftCv.width; riftStars.height = riftCv.height;
+      var sx = riftStars.getContext('2d');
+      sx.setTransform(RPR, 0, 0, RPR, 0, 0);
+      sx.fillStyle = '#020309'; sx.fillRect(0, 0, RW, RH);
+      var n = Math.round(RW * RH / 2400);
+      for (var i = 0; i < n; i++) {
+        var a = Math.random();
+        sx.fillStyle = 'rgba(220, 230, 255, ' + (0.12 + a * a * 0.7).toFixed(3) + ')';
+        sx.beginPath(); sx.arc(Math.random() * RW, Math.random() * RH, Math.random() < 0.05 ? 1.3 : 0.65, 0, 6.2832); sx.fill();
+      }
+    }
+    function riftShape(t) {
+      var o = riftState.open, e = o < 0.5 ? 4 * o * o * o : 1 - Math.pow(-2 * o + 2, 3) / 2;
+      var intro = Math.min(1, riftState.intro);
+      var top = RH * (0.12 + 0.08 * (1 - intro)) * (1 - e) - RH * 0.7 * e;
+      var bot = RH * (0.68 - 0.08 * (1 - intro)) * (1 - e) + RH * 1.7 * e;
+      var cx = RW / 2, base = Math.min(RW, RH) * 0.009 * intro * (1 + riftState.flash * 0.3);
+      var tilt = RW * 0.03, bendA = Math.min(RW, RH) * 0.02;
+      var left = [], right = [];
+      for (var i = 0; i <= RSEG; i++) {
+        var u = i / RSEG, y = top + (bot - top) * u;
+        var taper = Math.pow(Math.sin(Math.PI * u), 0.75), wide = Math.pow(Math.sin(Math.PI * u), 0.3);
+        var half = base * taper + e * RW * 0.85 * wide;
+        var amp = (2.5 + 7 * taper) * (1 + e * 2.5);
+        var x0 = cx + (u - 0.5) * tilt + (Math.sin(u * Math.PI * 1.3 + riftBendP[0]) * 0.65 + Math.sin(u * Math.PI * 3.1 + riftBendP[1]) * 0.25) * bendA;
+        var l = riftL[i], r = riftR[i];
+        left.push([x0 - half - (l.base + Math.sin(t * l.sp + l.ph) * 0.35) * amp * taper, y]);
+        right.push([x0 + half + (r.base + Math.sin(t * r.sp + r.ph) * 0.35) * amp * taper, y]);
+      }
+      return { left: left, right: right, top: top, bot: bot, cx: cx, e: e };
+    }
+    function riftPath(pts, close) {
+      var p = new Path2D();
+      p.moveTo(pts[0][0], pts[0][1]);
+      for (var i = 1; i < pts.length; i++) p.lineTo(pts[i][0], pts[i][1]);
+      if (close) p.closePath();
+      return p;
+    }
+    function riftDraw(dt) {
+      var c = rctx, st = riftState;
+      st.t += dt;
+      st.intro = Math.min(1, st.intro + dt / 1.6);
+      if (st.opening) {
+        st.flash = Math.min(1, st.flash + dt / 0.18);
+        if (st.flash >= 1) st.open = Math.min(1, st.open + dt / 1.3);
+      }
+      var sh = riftShape(st.t), e = sh.e, glow = st.intro * (1 - e) + st.flash * 0.6 * (1 - e);
+      c.setTransform(RPR, 0, 0, RPR, 0, 0);
+      c.globalCompositeOperation = 'source-over';
+      c.drawImage(riftStars, 0, 0, RW, RH);
+      // light spilling out of the tear
+      var cy = (sh.top + sh.bot) / 2, len = Math.max(1, sh.bot - sh.top);
+      c.save();
+      c.translate(sh.cx, cy); c.scale(0.42, 1);
+      var g = c.createRadialGradient(0, 0, 0, 0, 0, len * 0.62);
+      g.addColorStop(0, 'rgba(160, 200, 255, ' + (0.26 * glow).toFixed(3) + ')');
+      g.addColorStop(0.45, 'rgba(130, 110, 255, ' + (0.08 * glow).toFixed(3) + ')');
+      g.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      c.fillStyle = g; c.fillRect(-len, -len, len * 2, len * 2);
+      c.restore();
+      var gap = riftPath(sh.left.concat(sh.right.slice().reverse()), true);
+      // cut the tear out so the site behind shows through it
+      c.globalCompositeOperation = 'destination-out';
+      c.fillStyle = '#000';   // fully opaque, so the cut is complete
+      c.fill(gap);
+      c.globalCompositeOperation = 'source-over';
+      // the white-hot inside, fading away as the tear opens
+      var core = st.intro * (1 - Math.min(1, e / 0.13));
+      core = core * core * (3 - 2 * core);
+      if (core > 0.01) { c.fillStyle = 'rgba(222, 236, 255, ' + core.toFixed(3) + ')'; c.fill(gap); }
+      // glowing edges
+      var edgeA = Math.max(0, (st.intro * 0.9 + st.flash * 0.5) * (1 - e * 0.85));
+      if (edgeA > 0.01) {
+        var pl = riftPath(sh.left, false), pr = riftPath(sh.right, false);
+        c.lineJoin = 'round'; c.lineCap = 'round';
+        c.shadowColor = 'rgba(110, 170, 255, 0.95)'; c.shadowBlur = 30 + st.flash * 30;
+        c.strokeStyle = 'rgba(140, 185, 255, ' + (0.55 * edgeA).toFixed(3) + ')'; c.lineWidth = 3;
+        c.stroke(pl); c.stroke(pr);
+        c.shadowColor = 'rgba(182, 156, 255, 0.9)'; c.shadowBlur = 12;
+        c.strokeStyle = 'rgba(255, 255, 255, ' + (0.9 * edgeA).toFixed(3) + ')'; c.lineWidth = 1.2;
+        c.stroke(pl); c.stroke(pr);
+        c.shadowBlur = 0;
+      }
+      // sparks pulled off the edges
+      var rate = st.opening ? 0 : 34 * st.intro;
+      for (var k = Math.floor(rate * dt + Math.random()); k > 0; k--) {
+        var side = Math.random() < 0.5, pts = side ? sh.left : sh.right, q = pts[Math.floor(Math.random() * pts.length)];
+        riftSparks.push({ x: q[0], y: q[1], vx: (side ? -1 : 1) * (8 + Math.random() * 30), vy: (Math.random() - 0.5) * 16, life: 0, max: 1 + Math.random() * 1.8, r: 0.5 + Math.random() * 1.1 });
+      }
+      if (st.opening && !st.burst) {
+        st.burst = true;
+        for (var b = 0; b < 160; b++) {
+          var sd = Math.random() < 0.5, pp = sd ? sh.left : sh.right, w = pp[Math.floor(Math.random() * pp.length)];
+          riftSparks.push({ x: w[0], y: w[1], vx: (sd ? -1 : 1) * (60 + Math.random() * 260), vy: (Math.random() - 0.5) * 90, life: 0, max: 0.6 + Math.random() * 0.9, r: 0.6 + Math.random() * 1.4 });
+        }
+      }
+      c.globalCompositeOperation = 'lighter';
+      for (var m = riftSparks.length - 1; m >= 0; m--) {
+        var sp = riftSparks[m];
+        sp.life += dt; sp.x += sp.vx * dt; sp.y += sp.vy * dt; sp.vx *= 0.985;
+        if (sp.life >= sp.max) { riftSparks.splice(m, 1); continue; }
+        var fa = Math.sin(Math.PI * sp.life / sp.max) * 0.85 * (1 - e * 0.5);
+        c.fillStyle = 'rgba(205, 225, 255, ' + fa.toFixed(3) + ')';
+        c.fillRect(sp.x - sp.r, sp.y - sp.r, sp.r * 2, sp.r * 2);
+      }
+      c.globalCompositeOperation = 'source-over';
+    }
+    function riftLoop(now) {
+      if (!riftState.run) return;
+      var dt = Math.min(0.05, Math.max(0, (now - (riftState.last || now)) / 1000));
+      riftState.last = now;
+      riftDraw(dt);
+      if (riftState.opening && riftState.open >= 1) {
+        riftState.run = false;
+        riftEl.remove();
+        if (riftState.done) riftState.done();
+        return;
+      }
+      requestAnimationFrame(riftLoop);
+    }
+    function riftShow() {
+      riftEl.hidden = false;
+      riftSize();
+      riftEl.classList.add('drawn');
+      riftState.run = true;
+      requestAnimationFrame(riftLoop);
+      window.addEventListener('resize', function () { if (riftState.run) riftSize(); });
+    }
+    function riftOpen(onOpening) {
+      riftState.opening = true;
+      riftEl.classList.add('opening');
+      // the site starts coming in while the tear is still opening
+      setTimeout(onOpening, 420);
+      riftState.done = null;
+    }
+
     // ---------- loader: the black hole forms behind it ----------
     var loader = document.getElementById('loader');
     var started = false;
@@ -1482,6 +1648,8 @@
       if (started) return;
       started = true;
       introRequested = true;
+      window.scrollTo(0, 0);
+      if (lenis) lenis.scrollTo(0, { immediate: true, force: true });
       root.classList.remove('locked');
       if (lenis) lenis.start();
       root.classList.remove('forming');
@@ -1506,22 +1674,25 @@
       // so the click that opens the site is also the one that starts the sound
       var soundPref = null;
       try { soundPref = localStorage.getItem('sn-sound'); } catch (e) {}
-      var gated = formMode && soundPref !== 'off';
-      var gate = document.getElementById('gate');
+      var gated = formMode && soundPref !== 'off' && !!document.getElementById('rift');
       function enterSite(withSound) {
-        if (started) return;
+        if (started || riftState.opening) return;
         setSound(withSound);
-        start();
+        riftOpen(function () {
+          start();
+          // a shared link to a section lands there once the site is open
+          var tgt = null;
+          try { tgt = location.hash && document.querySelector(location.hash); } catch (e) {}
+          if (tgt && lenis) setTimeout(function () { lenis.scrollTo(tgt, { offset: -70, duration: 1.6 }); }, 1400);
+        });
       }
       if (gated) {
-        loader.classList.add('gated');
-        loader.removeAttribute('aria-hidden');
+        riftShow();
         document.getElementById('gateEnter').addEventListener('click', function () { enterSite(true); });
         document.getElementById('gateQuiet').addEventListener('click', function () { enterSite(false); });
       }
       function showGate() {
-        gate.hidden = false;
-        requestAnimationFrame(function () { gate.classList.add('show'); });
+        document.getElementById('riftUi').classList.add('show');
         try { document.getElementById('gateEnter').focus({ preventScroll: true }); } catch (e) {}
       }
       var fill = document.getElementById('loaderFill');
