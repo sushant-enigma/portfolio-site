@@ -37,6 +37,15 @@ check "404 page is the custom one" 'curl -s -m 20 "https://$SITE/no-such-page" |
 check "_headers is not served as a file" '[ "$(code "https://$SITE/_headers")" = 404 ]'
 for f in favicon.svg robots.txt sitemap.xml; do check "/$f returns 200" '[ "$(code "https://$SITE/$f")" = 200 ]'; done
 
+echo "== background video"
+for f in media/landscape.av1.webm media/landscape.h264.mp4 media/portrait.av1.webm media/portrait.h264.mp4 media/landscape.jpg media/portrait.jpg; do
+  check "/$f returns 200" '[ "$(code "https://$SITE/$f")" = 200 ]'
+done
+check "videos answer a range request with 206 and just those bytes (Safari needs this)" \
+  '[ "$(curl -s -o /dev/null -m 20 -r 0-1 -w "%{http_code} %{size_download}" "https://$SITE/media/portrait.h264.mp4")" = "206 2" ]'
+check "an open-ended range returns 206" '[ "$(curl -s -o /dev/null -m 30 -r 1000- -w "%{http_code}" "https://$SITE/media/landscape.av1.webm")" = 206 ]'
+check "mp4 is served as video/mp4" '[ "$(curl -sI -m 20 "https://$SITE/media/landscape.h264.mp4" | tr -d "\r" | grep -i "^content-type:" | cut -d" " -f2)" = video/mp4 ]'
+
 echo "== security headers"
 H=$(curl -sI -m 20 "https://$SITE/" | tr -d '\r')
 for name in content-security-policy strict-transport-security x-content-type-options x-frame-options referrer-policy permissions-policy cross-origin-opener-policy; do

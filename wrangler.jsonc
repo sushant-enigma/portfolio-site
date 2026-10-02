@@ -1,12 +1,16 @@
-// The site: static files only, served straight from Cloudflare's edge.
-// No Worker code runs for these requests, so they stay free and unlimited.
+// The site: static files served straight from Cloudflare's edge. No Worker code runs for them,
+// so they stay free and unlimited. Only /media/* (the background videos) goes through
+// worker/media.js first, which adds the byte-range support Safari needs to play video.
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "sushantnagil-site",
+  "main": "worker/media.js",
   "compatibility_date": "2026-09-01",
   "assets": {
     "directory": "./dist",
-    "not_found_handling": "404-page"
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/media/*"]
   },
   "workers_dev": false,
   "preview_urls": false,
